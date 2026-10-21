@@ -56,6 +56,7 @@ export default async function RootLayout({
       )}
     >
       <head>
+        <meta name="color-scheme" content="light dark" />
         <script
           id="theme-init"
           dangerouslySetInnerHTML={{
@@ -63,12 +64,11 @@ export default async function RootLayout({
               (function() {
                 try {
                   const root = document.documentElement;
-                  const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-                  const defaultTheme = ${JSON.stringify(style.theme)};
+                  const mql = window.matchMedia('(prefers-color-scheme: dark)');
+                  const getDeviceTheme = () => (mql && mql.matches ? 'dark' : 'light');
                   
                   // Set defaults from config
                   const config = ${JSON.stringify({
-                    theme: style.theme,
                     brand: style.brand,
                     accent: style.accent,
                     neutral: style.neutral,
@@ -81,31 +81,35 @@ export default async function RootLayout({
                     "viz-style": dataStyle.variant,
                   })};
                   
-                  // Apply default values
+                  // Apply default style values
                   Object.entries(config).forEach(([key, value]) => {
                     root.setAttribute('data-' + key, value);
                   });
                   
-                  // Resolve theme
-                  const resolveTheme = (themeValue) => {
-                    if (!themeValue || themeValue === 'system') {
-                      return mediaQuery.matches ? 'dark' : 'light';
-                    }
-                    return themeValue;
-                  };
-                  
-                  // Apply saved theme
-                  const savedTheme = localStorage.getItem('data-theme');
-                  const resolvedTheme = resolveTheme(savedTheme);
-                  root.setAttribute('data-theme', resolvedTheme);
+                  // Check if user explicitly toggled theme; if not, match device
+                  const hasUserOverride = localStorage.getItem('user-has-toggled') === 'true';
+                  const savedTheme = hasUserOverride ? localStorage.getItem('data-theme') : null;
+                  const activeTheme = (savedTheme === 'light' || savedTheme === 'dark') ? savedTheme : getDeviceTheme();
 
-                  // Keep in sync when device switches light/dark mode
-                  mediaQuery.addEventListener('change', (e) => {
-                    const currentSaved = localStorage.getItem('data-theme');
-                    if (!currentSaved || currentSaved === 'system') {
-                      root.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+                  root.setAttribute('data-theme', activeTheme);
+                  root.style.colorScheme = activeTheme;
+
+                  // Keep in sync when device switches light/dark mode (unless user manually toggled)
+                  const onDeviceChange = (e) => {
+                    if (localStorage.getItem('user-has-toggled') !== 'true') {
+                      const next = e.matches ? 'dark' : 'light';
+                      root.setAttribute('data-theme', next);
+                      root.style.colorScheme = next;
                     }
-                  });
+                  };
+
+                  if (mql) {
+                    if (mql.addEventListener) {
+                      mql.addEventListener('change', onDeviceChange);
+                    } else if (mql.addListener) {
+                      mql.addListener(onDeviceChange);
+                    }
+                  }
                   
                   // Apply any saved style overrides
                   const styleKeys = Object.keys(config);
@@ -118,8 +122,10 @@ export default async function RootLayout({
                   });
                 } catch (e) {
                   console.error('Failed to initialize theme:', e);
-                  const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-                  document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+                  var isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+                  var fallback = isDark ? 'dark' : 'light';
+                  document.documentElement.setAttribute('data-theme', fallback);
+                  document.documentElement.style.colorScheme = fallback;
                 }
               })();
             `,

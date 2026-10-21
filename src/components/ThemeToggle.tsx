@@ -15,44 +15,63 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
   variant = "ghost",
   ...props
 }) => {
-  const { theme, resolvedTheme, setTheme } = useTheme();
+  const { setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const [currentTheme, setCurrentTheme] = useState<"light" | "dark">("dark");
 
   useEffect(() => {
     setMounted(true);
+    const active =
+      document.documentElement.getAttribute("data-theme") === "light"
+        ? "light"
+        : "dark";
+    setCurrentTheme(active);
+
+    const observer = new MutationObserver(() => {
+      const updated =
+        document.documentElement.getAttribute("data-theme") === "light"
+          ? "light"
+          : "dark";
+      setCurrentTheme(updated);
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-theme"],
+    });
+
+    return () => observer.disconnect();
   }, []);
+
+  const handleToggle = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const next = currentTheme === "dark" ? "light" : "dark";
+    setCurrentTheme(next);
+    document.documentElement.setAttribute("data-theme", next);
+    document.documentElement.style.colorScheme = next;
+    try {
+      localStorage.setItem("user-has-toggled", "true");
+      localStorage.setItem("data-theme", next);
+    } catch {}
+    setTheme(next);
+  };
+
+  // If currently dark, show sun icon to switch to light; if light, show moon icon to switch to dark
+  const icon = currentTheme === "dark" ? "light" : "dark";
+  const label =
+    currentTheme === "dark" ? "Switch to light mode" : "Switch to dark mode";
 
   if (!mounted) {
     return (
       <ToggleButton
         size={size}
         variant={variant}
-        prefixIcon="computer"
+        prefixIcon="light"
         aria-label="Toggle theme"
         {...props}
       />
     );
   }
-
-  // Cycle between System (Device) -> Light -> Dark -> System
-  const handleToggle = () => {
-    if (theme === "system") {
-      // If currently following device, switch to the opposite of resolved theme first
-      setTheme(resolvedTheme === "dark" ? "light" : "dark");
-    } else if (theme === "light") {
-      setTheme(resolvedTheme === "light" ? "dark" : "system");
-    } else {
-      setTheme("system");
-    }
-  };
-
-  const icon =
-    theme === "system" ? "computer" : theme === "dark" ? "dark" : "light";
-
-  const label =
-    theme === "system"
-      ? `System (${resolvedTheme} mode)`
-      : `${theme.charAt(0).toUpperCase() + theme.slice(1)} mode`;
 
   return (
     <ToggleButton
@@ -60,8 +79,8 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
       variant={variant}
       prefixIcon={icon}
       onClick={handleToggle}
-      aria-label={`Theme: ${label}. Click to switch theme.`}
-      title={`Theme: ${label}`}
+      aria-label={label}
+      title={label}
       {...props}
     />
   );

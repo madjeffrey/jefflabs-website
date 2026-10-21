@@ -56,8 +56,16 @@ export const Header = () => {
 
   return (
     <>
-      <Fade s={{ hide: true }} fillWidth position="fixed" height="80" zIndex={9} />
       <Fade
+        style={{ pointerEvents: "none" }}
+        s={{ hide: true }}
+        fillWidth
+        position="fixed"
+        height="80"
+        zIndex={9}
+      />
+      <Fade
+        style={{ pointerEvents: "none" }}
         hide
         s={{ hide: false }}
         fillWidth
