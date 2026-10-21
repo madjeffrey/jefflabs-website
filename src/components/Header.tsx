@@ -7,7 +7,6 @@ import { Fade, Flex, Line, Row, ToggleButton } from "@once-ui-system/core";
 
 import { routes, display, person, about, blog, work, gallery } from "@/resources";
 import type { IconName } from "@/resources/icons";
-import { ThemeToggle } from "./ThemeToggle";
 import styles from "./Header.module.scss";
 
 type TimeDisplayProps = {
@@ -127,12 +126,6 @@ export const Header = () => {
                       </Row>
                     </Fragment>
                   ),
-              )}
-              {display.themeSwitcher && (
-                <>
-                  <Line background="neutral-alpha-medium" vert maxHeight="24" />
-                  <ThemeToggle />
-                </>
               )}
             </Row>
           </Row>

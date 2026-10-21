@@ -3,7 +3,18 @@
 import React, { useEffect, useState } from "react";
 import { Row, ToggleButton, useTheme } from "@once-ui-system/core";
 
-export const ThemeToggle: React.FC = () => {
+interface ThemeToggleProps {
+  size?: "s" | "m" | "l" | "xl";
+  variant?: "ghost" | "outline" | "subtle";
+  className?: string;
+  style?: React.CSSProperties;
+}
+
+export const ThemeToggle: React.FC<ThemeToggleProps> = ({
+  size = "s",
+  variant = "ghost",
+  ...props
+}) => {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [currentTheme, setCurrentTheme] = useState("light");
@@ -22,9 +33,12 @@ export const ThemeToggle: React.FC = () => {
 
   return (
     <ToggleButton
+      size={size}
+      variant={variant}
       prefixIcon={icon}
       onClick={() => setTheme(nextTheme)}
       aria-label={`Switch to ${nextTheme} mode`}
+      {...props}
     />
   );
 };
