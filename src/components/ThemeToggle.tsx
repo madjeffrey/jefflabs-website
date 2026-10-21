@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Row, ToggleButton, useTheme } from "@once-ui-system/core";
+import { ToggleButton, useTheme } from "@once-ui-system/core";
 
 interface ThemeToggleProps {
   size?: "s" | "m" | "l" | "xl";
@@ -15,29 +15,53 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
   variant = "ghost",
   ...props
 }) => {
-  const { theme, setTheme } = useTheme();
+  const { theme, resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  const [currentTheme, setCurrentTheme] = useState("light");
 
   useEffect(() => {
     setMounted(true);
-    setCurrentTheme(document.documentElement.getAttribute("data-theme") || "light");
   }, []);
 
-  useEffect(() => {
-    setCurrentTheme(document.documentElement.getAttribute("data-theme") || "light");
-  }, [theme]);
+  if (!mounted) {
+    return (
+      <ToggleButton
+        size={size}
+        variant={variant}
+        prefixIcon="computer"
+        aria-label="Toggle theme"
+        {...props}
+      />
+    );
+  }
 
-  const icon = currentTheme === "dark" ? "light" : "dark";
-  const nextTheme = currentTheme === "light" ? "dark" : "light";
+  // Cycle between System (Device) -> Light -> Dark -> System
+  const handleToggle = () => {
+    if (theme === "system") {
+      // If currently following device, switch to the opposite of resolved theme first
+      setTheme(resolvedTheme === "dark" ? "light" : "dark");
+    } else if (theme === "light") {
+      setTheme(resolvedTheme === "light" ? "dark" : "system");
+    } else {
+      setTheme("system");
+    }
+  };
+
+  const icon =
+    theme === "system" ? "computer" : theme === "dark" ? "dark" : "light";
+
+  const label =
+    theme === "system"
+      ? `System (${resolvedTheme} mode)`
+      : `${theme.charAt(0).toUpperCase() + theme.slice(1)} mode`;
 
   return (
     <ToggleButton
       size={size}
       variant={variant}
       prefixIcon={icon}
-      onClick={() => setTheme(nextTheme)}
-      aria-label={`Switch to ${nextTheme} mode`}
+      onClick={handleToggle}
+      aria-label={`Theme: ${label}. Click to switch theme.`}
+      title={`Theme: ${label}`}
       {...props}
     />
   );

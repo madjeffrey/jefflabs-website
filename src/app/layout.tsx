@@ -63,10 +63,12 @@ export default async function RootLayout({
               (function() {
                 try {
                   const root = document.documentElement;
-                  const defaultTheme = 'system';
+                  const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+                  const defaultTheme = ${JSON.stringify(style.theme)};
                   
                   // Set defaults from config
                   const config = ${JSON.stringify({
+                    theme: style.theme,
                     brand: style.brand,
                     accent: style.accent,
                     neutral: style.neutral,
@@ -87,7 +89,7 @@ export default async function RootLayout({
                   // Resolve theme
                   const resolveTheme = (themeValue) => {
                     if (!themeValue || themeValue === 'system') {
-                      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                      return mediaQuery.matches ? 'dark' : 'light';
                     }
                     return themeValue;
                   };
@@ -96,10 +98,19 @@ export default async function RootLayout({
                   const savedTheme = localStorage.getItem('data-theme');
                   const resolvedTheme = resolveTheme(savedTheme);
                   root.setAttribute('data-theme', resolvedTheme);
+
+                  // Keep in sync when device switches light/dark mode
+                  mediaQuery.addEventListener('change', (e) => {
+                    const currentSaved = localStorage.getItem('data-theme');
+                    if (!currentSaved || currentSaved === 'system') {
+                      root.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+                    }
+                  });
                   
                   // Apply any saved style overrides
                   const styleKeys = Object.keys(config);
                   styleKeys.forEach(key => {
+                    if (key === 'theme') return;
                     const value = localStorage.getItem('data-' + key);
                     if (value) {
                       root.setAttribute('data-' + key, value);
@@ -107,7 +118,8 @@ export default async function RootLayout({
                   });
                 } catch (e) {
                   console.error('Failed to initialize theme:', e);
-                  document.documentElement.setAttribute('data-theme', 'dark');
+                  const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+                  document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
                 }
               })();
             `,
