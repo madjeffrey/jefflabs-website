@@ -1,0 +1,37 @@
+---
+title: "Moneyball on the Court: Expected Side-Out Value (EPV) and 0–3 Pass Ratings"
+summary: "Why conventional passing averages lie, and how Expected Side-Out Value measures the true impact of a 3-point pass versus an overpass."
+image: "/images/gallery/horizontal-3.jpg"
+publishedAt: "2026-09-04"
+tag: "Sports Analytics"
+---
+
+## Beyond Simple Passing Averages
+
+Traditionally, volleyball statisticians grade serve-receive passes on a **0 to 3 scale**:
+- **3-Pass (Perfect)**: Setter has all four attacking options (Middle Quick, Outside, Opposite, Pipe) with zero movement stress.
+- **2-Pass (Good)**: Setter can still run two pin options and a delayed middle or pipe route.
+- **1-Pass (Out of System)**: High ball to the pins against a set double or triple block.
+- **0-Pass (Ace / Overpass)**: Immediate point lost or free-ball kill for the serving team.
+
+## Expected Side-Out Probability Formula
+
+Instead of treating the difference between a 2.0 and 3.0 pass as equal to the difference between a 0.0 and 1.0 pass, we weight each pass outcome k in (0, 1, 2, 3) by its empirical **Expected Side-Out Value** E(SideOut | k):
+
+<div className="my-6 rounded-2xl border border-border-brand bg-brand-soft/40 p-4 text-center font-mono text-sm text-fg">
+  EPV(passer) = Σ [ P(Pass = k) · E(SideOut | Pass = k) ] (for k = 0 to 3)
+</div>
+
+<Table
+  data={{
+    headers: ["Pass Rating (k)", "Setter Options Available", "First-Ball Kill %", "Expected Side-Out (EPV)"],
+    rows: [
+      ["3 - In-System Perfect", "Quick + Pin + Pipe (4 options)", "54.2%", "0.715"],
+      ["2 - Playable Medium", "Both Pins + Pipe (3 options)", "46.8%", "0.642"],
+      ["1 - Out-of-System High", "High Ball Pin Only (1-2 options)", "31.5%", "0.480"],
+      ["0 - Reception Error / Overpass", "None", "0.0%", "0.045"]
+    ]
+  }}
+/>
+
+Reducing reception errors (0-passes) by just 4% improves team side-out efficiency more than increasing 3-pass frequency by 10%.

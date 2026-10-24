@@ -1,6 +1,8 @@
 "use client";
 
-import { Row, Text, Button, useToast } from "@once-ui-system/core";
+import React from "react";
+import { Button } from "@/components/ui/Button";
+import { useToast } from "@/components/Providers";
 import { socialSharing } from "@/resources";
 import type { IconName } from "@/resources/icons";
 
@@ -28,14 +30,14 @@ const socialPlatforms: Record<string, SocialPlatform> = {
     name: "linkedin",
     icon: "linkedin",
     label: "LinkedIn",
-    generateUrl: (title, url) =>
+    generateUrl: (_, url) =>
       `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
   },
   facebook: {
     name: "facebook",
     icon: "facebook",
     label: "Facebook",
-    generateUrl: (title, url) =>
+    generateUrl: (_, url) =>
       `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
   },
   pinterest: {
@@ -70,26 +72,23 @@ const socialPlatforms: Record<string, SocialPlatform> = {
     icon: "email",
     label: "Email",
     generateUrl: (title, url) =>
-      `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(`Check out this post: ${url}`)}`,
+      `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(`Check out this volleyball & engineering post: ${url}`)}`,
   },
 };
 
 export function ShareSection({ title, url }: ShareSectionProps) {
   const { addToast } = useToast();
-  // Don't render if sharing is disabled
-  if (!socialSharing.display) {
-    return null;
-  }
+
+  if (!socialSharing.display) return null;
 
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(url);
       addToast({
         variant: "success",
-        message: "Link copied to clipboard",
+        message: "Article link copied to clipboard",
       });
-    } catch (err) {
-      console.error("Failed to copy: ", err);
+    } catch {
       addToast({
         variant: "danger",
         message: "Failed to copy link",
@@ -97,18 +96,17 @@ export function ShareSection({ title, url }: ShareSectionProps) {
     }
   };
 
-  // Get enabled platforms
   const enabledPlatforms = Object.entries(socialSharing.platforms)
-    .filter(([_, enabled]) => enabled && _ !== "copyLink")
+    .filter(([key, enabled]) => enabled && key !== "copyLink")
     .map(([platformKey]) => ({ key: platformKey, ...socialPlatforms[platformKey] }))
-    .filter((platform) => platform.name); // Filter out platforms that don't exist in our definitions
+    .filter((platform) => platform.name);
 
   return (
-    <Row fillWidth center gap="16" marginTop="32" marginBottom="16">
-      <Text variant="label-default-m" onBackground="neutral-weak">
-        Share this post:
-      </Text>
-      <Row data-border="rounded" gap="16" horizontal="center" wrap>
+    <div className="my-8 flex w-full flex-wrap items-center justify-center gap-4 border-y border-border py-6">
+      <span className="text-xs font-semibold uppercase tracking-wider text-fg-muted">
+        Share this playbook:
+      </span>
+      <div className="flex flex-wrap items-center justify-center gap-2.5">
         {enabledPlatforms.map((platform, index) => (
           <Button
             key={index}
@@ -116,7 +114,8 @@ export function ShareSection({ title, url }: ShareSectionProps) {
             size="s"
             href={platform.generateUrl(title, url)}
             prefixIcon={platform.icon}
-            aria-label={`Share on ${platform.name}`}
+            label={platform.label}
+            aria-label={`Share on ${platform.label}`}
           />
         ))}
 
@@ -126,10 +125,11 @@ export function ShareSection({ title, url }: ShareSectionProps) {
             size="s"
             onClick={handleCopy}
             prefixIcon="openLink"
+            label="Copy Link"
             aria-label="Copy link"
           />
         )}
-      </Row>
-    </Row>
+      </div>
+    </div>
   );
 }

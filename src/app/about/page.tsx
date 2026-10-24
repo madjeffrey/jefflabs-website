@@ -1,21 +1,16 @@
+import React from "react";
 import {
   Avatar,
   Button,
-  Column,
-  Heading,
   Icon,
   IconButton,
   Media,
   Tag,
-  Text,
   Meta,
   Schema,
-  Row,
-} from "@once-ui-system/core";
+} from "@/components";
 import { baseURL, about, person, social } from "@/resources";
 import TableOfContents from "@/components/about/TableOfContents";
-import styles from "@/components/about/about.module.scss";
-import React from "react";
 
 export async function generateMetadata() {
   return Meta.generate({
@@ -50,8 +45,9 @@ export default function About() {
       items: about.technical.skills.map((skill) => skill.title),
     },
   ];
+
   return (
-    <Column maxWidth="m">
+    <div className="w-full max-w-4xl py-6">
       <Schema
         as="webPage"
         baseURL={baseURL}
@@ -65,280 +61,250 @@ export default function About() {
           image: `${baseURL}${person.avatar}`,
         }}
       />
+
       {about.tableOfContent.display && (
-        <Column
-          left="0"
-          style={{ top: "50%", transform: "translateY(-50%)" }}
-          position="fixed"
-          paddingLeft="24"
-          gap="32"
-          s={{ hide: true }}
-        >
-          <TableOfContents structure={structure} about={about} />
-        </Column>
+        <TableOfContents structure={structure} about={about} />
       )}
-      <Row fillWidth s={{ direction: "column" }} horizontal="center">
+
+      <div className="flex w-full flex-col gap-12 md:flex-row md:items-start">
         {about.avatar.display && (
-          <Column
-            className={styles.avatar}
-            top="64"
-            fitHeight
-            position="sticky"
-            s={{ position: "relative", style: { top: "auto" } }}
-            xs={{ style: { top: "auto" } }}
-            minWidth="160"
-            paddingX="l"
-            paddingBottom="xl"
-            gap="m"
-            flex={3}
-            horizontal="center"
-          >
-            <Avatar src={person.avatar} size="xl" aria-label={person.name} />
-            <Row gap="8" vertical="center">
-              <Icon onBackground="accent-weak" name="globe" />
-              {person.location}
-            </Row>
+          <aside className="flex flex-col items-center gap-5 md:sticky md:top-24 md:w-1/3">
+            <div className="relative">
+              <Avatar src={person.avatar} size="xl" aria-label={person.name} />
+              <span
+                title="Volleyball & AI Lab"
+                className="absolute bottom-1 right-1 flex h-9 w-9 items-center justify-center rounded-full border-2 border-page bg-brand text-neutral-950 shadow-md"
+              >
+                <Icon name="volleyball" size="s" />
+              </span>
+            </div>
+
+            <div className="flex items-center gap-2 text-xs font-medium text-fg-muted">
+              <Icon name="globe" size="s" className="text-brand" />
+              <span>{person.location}</span>
+            </div>
+
+            {person.volleyball && (
+              <div className="w-full rounded-2xl border border-border bg-surface/70 p-4 text-center backdrop-blur-md">
+                <div className="text-[11px] font-semibold uppercase tracking-wider text-brand">
+                  Court Position
+                </div>
+                <div className="mt-1 text-sm font-bold text-fg">
+                  {person.volleyball.position}
+                </div>
+                <div className="mt-1 text-xs text-fg-muted">
+                  {person.volleyball.favoriteSystem}
+                </div>
+              </div>
+            )}
+
             {person.languages && person.languages.length > 0 && (
-              <Row wrap gap="8">
+              <div className="flex flex-wrap justify-center gap-2">
                 {person.languages.map((language, index) => (
-                  <Tag key={index} size="l">
+                  <Tag key={index} size="m">
                     {language}
                   </Tag>
                 ))}
-              </Row>
+              </div>
             )}
-          </Column>
+          </aside>
         )}
-        <Column className={styles.blockAlign} flex={9} maxWidth={40}>
-          <Column
+
+        <div className="flex flex-1 flex-col gap-12">
+          <section
             id={about.intro.title}
-            fillWidth
-            minHeight="160"
-            vertical="center"
-            marginBottom="32"
+            className="flex flex-col items-center text-center md:items-start md:text-left"
           >
             {about.calendar.display && (
-              <Row
-                fitWidth
-                border="brand-alpha-medium"
-                background="brand-alpha-weak"
-                radius="full"
-                padding="4"
-                gap="8"
-                marginBottom="m"
-                vertical="center"
-                className={styles.blockAlign}
-                style={{
-                  backdropFilter: "blur(var(--static-space-1))",
-                }}
-              >
-                <Icon paddingLeft="12" name="calendar" onBackground="brand-weak" />
-                <Row paddingX="8">Schedule a call</Row>
+              <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-border-brand bg-brand-soft p-1.5 pl-3.5 backdrop-blur-md">
+                <Icon name="calendar" size="s" className="text-brand" />
+                <span className="text-xs font-semibold text-fg px-1">
+                  Schedule a call or court session
+                </span>
                 <IconButton
                   href={about.calendar.link}
-                  data-border="rounded"
                   variant="secondary"
+                  size="s"
                   icon="chevronRight"
                   aria-label="Schedule a call"
                 />
-              </Row>
+              </div>
             )}
-            <Heading className={styles.textAlign} variant="display-strong-xl">
+
+            <h1 className="font-heading text-4xl sm:text-5xl font-extrabold tracking-tight text-fg">
               {person.name}
-            </Heading>
-            <Text
-              className={styles.textAlign}
-              variant="display-default-xs"
-              onBackground="neutral-weak"
-            >
+            </h1>
+            <p className="mt-2 text-lg sm:text-xl font-medium text-brand">
               {person.role}
-            </Text>
+            </p>
+
             {social.length > 0 && (
-              <Row
-                className={styles.blockAlign}
-                paddingTop="20"
-                paddingBottom="8"
-                gap="8"
-                wrap
-                horizontal="center"
-                fitWidth
-                data-border="rounded"
-              >
+              <div className="mt-5 flex flex-wrap items-center justify-center gap-2.5 md:justify-start">
                 {social
                   .filter((item) => item.essential)
                   .map(
                     (item) =>
                       item.link && (
-                        <React.Fragment key={item.name}>
-                          <Row s={{ hide: true }}>
-                            <Button
-                              key={item.name}
-                              href={item.link}
-                              prefixIcon={item.icon}
-                              label={item.name}
-                              size="s"
-                              weight="default"
-                              variant="secondary"
-                            />
-                          </Row>
-                          <Row hide s={{ hide: false }}>
-                            <IconButton
-                              size="l"
-                              key={`${item.name}-icon`}
-                              href={item.link}
-                              icon={item.icon}
-                              variant="secondary"
-                              aria-label={item.name}
-                            />
-                          </Row>
-                        </React.Fragment>
+                        <Button
+                          key={item.name}
+                          href={item.link}
+                          prefixIcon={item.icon}
+                          label={item.name}
+                          size="s"
+                          variant="secondary"
+                        />
                       ),
                   )}
-              </Row>
+              </div>
             )}
-          </Column>
 
-          {about.intro.display && (
-            <Column textVariant="body-default-l" fillWidth gap="m" marginBottom="xl">
-              {about.intro.description}
-            </Column>
-          )}
+            {about.intro.display && (
+              <div className="mt-8 space-y-4 text-base leading-relaxed text-fg-muted">
+                {about.intro.description}
+              </div>
+            )}
+          </section>
 
           {about.work.display && (
-            <>
-              <Heading as="h2" id={about.work.title} variant="display-strong-s" marginBottom="m">
+            <section className="flex flex-col gap-6">
+              <h2
+                id={about.work.title}
+                className="font-heading text-2xl sm:text-3xl font-bold tracking-tight text-fg border-b border-border pb-3"
+              >
                 {about.work.title}
-              </Heading>
-              <Column fillWidth gap="l" marginBottom="40">
+              </h2>
+              <div className="flex flex-col gap-10">
                 {about.work.experiences.map((experience, index) => (
-                  <Column key={`${experience.company}-${experience.role}-${index}`} fillWidth>
-                    <Row fillWidth horizontal="between" vertical="end" marginBottom="4">
-                      <Text id={experience.company} variant="heading-strong-l">
+                  <div
+                    key={`${experience.company}-${experience.role}-${index}`}
+                    className="flex flex-col gap-2 rounded-2xl border border-border bg-surface/50 p-5 sm:p-6"
+                  >
+                    <div className="flex flex-wrap items-baseline justify-between gap-2">
+                      <h3
+                        id={experience.company}
+                        className="font-heading text-xl font-bold text-fg"
+                      >
                         {experience.company}
-                      </Text>
-                      <Text variant="heading-default-xs" onBackground="neutral-weak">
+                      </h3>
+                      <span className="font-mono text-xs text-fg-muted">
                         {experience.timeframe}
-                      </Text>
-                    </Row>
-                    <Text variant="body-default-s" onBackground="brand-weak" marginBottom="m">
+                      </span>
+                    </div>
+                    <div className="text-sm font-semibold text-brand mb-2">
                       {experience.role}
-                    </Text>
-                    <Column as="ul" gap="16">
-                      {experience.achievements.map(
-                        (achievement: React.ReactNode, index: number) => (
-                          <Text
-                            as="li"
-                            variant="body-default-m"
-                            key={`${experience.company}-${index}`}
-                          >
-                            {achievement}
-                          </Text>
-                        ),
-                      )}
-                    </Column>
+                    </div>
+                    <ul className="list-disc space-y-2.5 pl-5 text-sm sm:text-base text-fg-muted marker:text-brand">
+                      {experience.achievements.map((achievement, idx) => (
+                        <li key={`${experience.company}-${idx}`} className="leading-relaxed">
+                          {achievement}
+                        </li>
+                      ))}
+                    </ul>
                     {experience.images && experience.images.length > 0 && (
-                      <Row fillWidth paddingTop="m" paddingLeft="40" gap="12" wrap>
-                        {experience.images.map((image, index) => (
-                          <Row
-                            key={index}
-                            border="neutral-medium"
-                            radius="m"
-                            minWidth={image.width}
-                            height={image.height}
-                          >
-                            <Media
-                              enlarge
-                              radius="m"
-                              sizes={image.width.toString()}
-                              alt={image.alt}
-                              src={image.src}
-                            />
-                          </Row>
+                      <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        {experience.images.map((image, idx) => (
+                          <Media
+                            key={idx}
+                            enlarge
+                            aspectRatio="16 / 9"
+                            alt={image.alt}
+                            src={image.src}
+                          />
                         ))}
-                      </Row>
+                      </div>
                     )}
-                  </Column>
+                  </div>
                 ))}
-              </Column>
-            </>
+              </div>
+            </section>
           )}
 
           {about.studies.display && (
-            <>
-              <Heading as="h2" id={about.studies.title} variant="display-strong-s" marginBottom="m">
+            <section className="flex flex-col gap-6">
+              <h2
+                id={about.studies.title}
+                className="font-heading text-2xl sm:text-3xl font-bold tracking-tight text-fg border-b border-border pb-3"
+              >
                 {about.studies.title}
-              </Heading>
-              <Column fillWidth gap="l" marginBottom="40">
+              </h2>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 {about.studies.institutions.map((institution, index) => (
-                  <Column key={`${institution.name}-${index}`} fillWidth gap="4">
-                    <Text id={institution.name} variant="heading-strong-l">
+                  <div
+                    key={`${institution.name}-${index}`}
+                    className="flex flex-col gap-2 rounded-2xl border border-border bg-surface/50 p-5"
+                  >
+                    <h3
+                      id={institution.name}
+                      className="font-heading text-lg font-bold text-fg"
+                    >
                       {institution.name}
-                    </Text>
-                    <Text variant="heading-default-xs" onBackground="neutral-weak">
+                    </h3>
+                    <div className="text-sm leading-relaxed text-fg-muted">
                       {institution.description}
-                    </Text>
-                  </Column>
+                    </div>
+                  </div>
                 ))}
-              </Column>
-            </>
+              </div>
+            </section>
           )}
 
           {about.technical.display && (
-            <>
-              <Heading
-                as="h2"
+            <section className="flex flex-col gap-6">
+              <h2
                 id={about.technical.title}
-                variant="display-strong-s"
-                marginBottom="40"
+                className="font-heading text-2xl sm:text-3xl font-bold tracking-tight text-fg border-b border-border pb-3"
               >
                 {about.technical.title}
-              </Heading>
-              <Column fillWidth gap="l">
+              </h2>
+              <div className="flex flex-col gap-8">
                 {about.technical.skills.map((skill, index) => (
-                  <Column key={`${skill}-${index}`} fillWidth gap="4">
-                    <Text id={skill.title} variant="heading-strong-l">
+                  <div
+                    key={`${skill.title}-${index}`}
+                    className="flex flex-col gap-3 rounded-2xl border border-border bg-surface/50 p-5 sm:p-6"
+                  >
+                    <h3
+                      id={skill.title}
+                      className="font-heading text-xl font-bold text-fg"
+                    >
                       {skill.title}
-                    </Text>
-                    <Text variant="body-default-m" onBackground="neutral-weak">
+                    </h3>
+                    <div className="text-sm sm:text-base leading-relaxed text-fg-muted">
                       {skill.description}
-                    </Text>
+                    </div>
                     {skill.tags && skill.tags.length > 0 && (
-                      <Row wrap gap="8" paddingTop="8">
+                      <div className="flex flex-wrap gap-2 pt-1">
                         {skill.tags.map((tag, tagIndex) => (
-                          <Tag key={`${skill.title}-${tagIndex}`} size="l" prefixIcon={tag.icon}>
+                          <Tag
+                            key={`${skill.title}-${tagIndex}`}
+                            size="l"
+                            prefixIcon={tag.icon}
+                            variant="brand"
+                          >
                             {tag.name}
                           </Tag>
                         ))}
-                      </Row>
+                      </div>
                     )}
                     {skill.images && skill.images.length > 0 && (
-                      <Row fillWidth paddingTop="m" gap="12" wrap>
-                        {skill.images.map((image, index) => (
-                          <Row
-                            key={index}
-                            border="neutral-medium"
-                            radius="m"
-                            minWidth={image.width}
-                            height={image.height}
-                          >
-                            <Media
-                              enlarge
-                              radius="m"
-                              sizes={image.width.toString()}
-                              alt={image.alt}
-                              src={image.src}
-                            />
-                          </Row>
+                      <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        {skill.images.map((image, idx) => (
+                          <Media
+                            key={idx}
+                            enlarge
+                            aspectRatio="16 / 9"
+                            alt={image.alt}
+                            src={image.src}
+                          />
                         ))}
-                      </Row>
+                      </div>
                     )}
-                  </Column>
+                  </div>
                 ))}
-              </Column>
-            </>
+              </div>
+            </section>
           )}
-        </Column>
-      </Row>
-    </Column>
+        </div>
+      </div>
+    </div>
   );
 }

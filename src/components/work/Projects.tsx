@@ -1,6 +1,6 @@
+import React from "react";
 import { getPosts } from "@/utils/utils";
-import { Column } from "@once-ui-system/core";
-import { ProjectCard } from "@/components";
+import { ProjectCard } from "@/components/ProjectCard";
 
 interface ProjectsProps {
   range?: [number, number?];
@@ -10,7 +10,6 @@ interface ProjectsProps {
 export function Projects({ range, exclude }: ProjectsProps) {
   let allProjects = getPosts(["src", "app", "work", "projects"]);
 
-  // Exclude by slug (exact match)
   if (exclude && exclude.length > 0) {
     allProjects = allProjects.filter((post) => !exclude.includes(post.slug));
   }
@@ -24,7 +23,7 @@ export function Projects({ range, exclude }: ProjectsProps) {
     : sortedProjects;
 
   return (
-    <Column fillWidth gap="xl" marginBottom="40" paddingX="l">
+    <div className="flex w-full flex-col gap-10 mb-10">
       {displayedProjects.map((post, index) => (
         <ProjectCard
           priority={index < 2}
@@ -33,6 +32,7 @@ export function Projects({ range, exclude }: ProjectsProps) {
           images={post.metadata.images}
           title={post.metadata.title}
           description={post.metadata.summary}
+          tag={typeof post.metadata.tag === "string" ? post.metadata.tag : undefined}
           hasContent={post.content.trim() !== ""}
           avatars={
             post.metadata.team?.map((member) => ({
@@ -43,6 +43,6 @@ export function Projects({ range, exclude }: ProjectsProps) {
           link={post.metadata.link || ""}
         />
       ))}
-    </Column>
+    </div>
   );
 }

@@ -4,30 +4,18 @@ import { slugify as transliterate } from "transliteration";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 
+import { HeadingLink } from "@/components/HeadingLink";
+import { CodeBlock, InlineCode } from "@/components/ui/CodeBlock";
 import {
-  Heading,
-  HeadingLink,
-  Text,
-  InlineCode,
-  TextProps,
-  MediaProps,
   Accordion,
   AccordionGroup,
   Table,
   Feedback,
-  Button,
-  Card,
-  Grid,
-  Row,
-  Column,
-  Icon,
-  Media,
   SmartLink,
-  List,
-  ListItem,
-  Line,
-} from "@once-ui-system/core";
-import { CodeBlock } from "@once-ui-system/core/code";
+} from "@/components/ui/MDXWidgets";
+import { Button } from "@/components/ui/Button";
+import { Media, type MediaProps } from "@/components/ui/Media";
+import { Icon } from "@/components/ui/Icon";
 
 type CustomLinkProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
   href: string;
@@ -35,87 +23,53 @@ type CustomLinkProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
 };
 
 function CustomLink({ href, children, ...props }: CustomLinkProps) {
-  if (href.startsWith("/")) {
-    return (
-      <SmartLink href={href} {...props}>
-        {children}
-      </SmartLink>
-    );
-  }
-
-  if (href.startsWith("#")) {
-    return (
-      <a href={href} {...props}>
-        {children}
-      </a>
-    );
-  }
-
   return (
-    <a href={href} target="_blank" rel="noopener noreferrer" {...props}>
+    <SmartLink href={href} {...props}>
       {children}
-    </a>
+    </SmartLink>
   );
 }
 
 function createImage({ alt, src, ...props }: MediaProps & { src: string }) {
-  if (!src) {
-    console.error("Media requires a valid 'src' property.");
-    return null;
-  }
-
+  if (!src) return null;
   return (
     <Media
-      marginTop="8"
-      marginBottom="16"
       enlarge
-      radius="m"
-      border="neutral-alpha-medium"
-      sizes="(max-width: 960px) 100vw, 960px"
       alt={alt}
       src={src}
+      className="my-6"
       {...props}
     />
   );
 }
 
 function slugify(str: string): string {
-  const strWithAnd = str.replace(/&/g, " and "); // Replace & with 'and'
+  const text = typeof str === "string" ? str : String(str ?? "");
+  const strWithAnd = text.replace(/&/g, " and ");
   return transliterate(strWithAnd, {
     lowercase: true,
-    separator: "-", // Replace spaces with -
-  }).replace(/\-\-+/g, "-"); // Replace multiple - with single -
+    separator: "-",
+  }).replace(/\-\-+/g, "-");
 }
 
 function createHeading(as: "h1" | "h2" | "h3" | "h4" | "h5" | "h6") {
-  const CustomHeading = ({
-    children,
-    ...props
-  }: Omit<React.ComponentProps<typeof HeadingLink>, "as" | "id">) => {
-    const slug = slugify(children as string);
+  const CustomHeading = ({ children, ...props }: { children: ReactNode }) => {
+    const slug = slugify(typeof children === "string" ? children : "section");
     return (
-      <HeadingLink marginTop="24" marginBottom="12" as={as} id={slug} {...props}>
+      <HeadingLink as={as} id={slug} {...props}>
         {children}
       </HeadingLink>
     );
   };
-
   CustomHeading.displayName = `${as}`;
-
   return CustomHeading;
 }
 
-function createParagraph({ children }: TextProps) {
+function createParagraph({ children }: { children: ReactNode }) {
   return (
-    <Text
-      style={{ lineHeight: "175%" }}
-      variant="body-default-m"
-      onBackground="neutral-medium"
-      marginTop="8"
-      marginBottom="12"
-    >
+    <p className="my-3.5 text-base leading-[1.8] text-fg-muted">
       {children}
-    </Text>
+    </p>
   );
 }
 
@@ -124,21 +78,16 @@ function createInlineCode({ children }: { children: ReactNode }) {
 }
 
 function createCodeBlock(props: any) {
-  // For pre tags that contain code blocks
   if (props.children && props.children.props && props.children.props.className) {
     const { className, children } = props.children.props;
-
-    // Extract language from className (format: language-xxx)
     const language = className.replace("language-", "");
     const label = language.charAt(0).toUpperCase() + language.slice(1);
 
     return (
       <CodeBlock
-        marginTop="8"
-        marginBottom="16"
         codes={[
           {
-            code: children,
+            code: String(children ?? ""),
             language,
             label,
           },
@@ -147,29 +96,28 @@ function createCodeBlock(props: any) {
       />
     );
   }
-
-  // Fallback for other pre tags or empty code blocks
-  return <pre {...props} />;
+  return <pre className="my-4 overflow-x-auto rounded-xl bg-neutral-950 p-4 text-xs text-neutral-100" {...props} />;
 }
 
 function createList(as: "ul" | "ol") {
-  return ({ children }: { children: ReactNode }) => <List as={as}>{children}</List>;
+  const ListTag = as;
+  return ({ children }: { children: ReactNode }) => (
+    <ListTag
+      className={`my-4 space-y-2 pl-6 text-fg-muted ${
+        as === "ol" ? "list-decimal" : "list-disc marker:text-brand"
+      }`}
+    >
+      {children}
+    </ListTag>
+  );
 }
 
 function createListItem({ children }: { children: ReactNode }) {
-  return (
-    <ListItem marginTop="4" marginBottom="8" style={{ lineHeight: "175%" }}>
-      {children}
-    </ListItem>
-  );
+  return <li className="leading-[1.75]">{children}</li>;
 }
 
 function createHR() {
-  return (
-    <Row fillWidth horizontal="center">
-      <Line maxWidth="40" />
-    </Row>
-  );
+  return <hr className="my-8 border-border-strong" />;
 }
 
 const components = {
@@ -188,8 +136,6 @@ const components = {
   ul: createList("ul") as any,
   li: createListItem as any,
   hr: createHR as any,
-  Heading,
-  Text,
   CodeBlock,
   InlineCode,
   Accordion,
@@ -197,10 +143,6 @@ const components = {
   Table,
   Feedback,
   Button,
-  Card,
-  Grid,
-  Row,
-  Column,
   Icon,
   Media,
   SmartLink,
@@ -215,8 +157,6 @@ export function CustomMDX(props: CustomMDXProps) {
     <MDXRemote
       options={{
         blockJS: false,
-        // Math between $$ and $$ (inline or on its own lines), rendered with KaTeX
-        // at build time. Single dollars stay plain text, so prices are safe.
         mdxOptions: {
           remarkPlugins: [[remarkMath, { singleDollarTextMath: false }]],
           rehypePlugins: [rehypeKatex],

@@ -1,0 +1,41 @@
+---
+title: "Building a Modular Volleyball Telemetry App with Next.js, TypeScript & Tailwind CSS"
+summary: "How we architected this portfolio and telemetry lab using clean TypeScript interfaces, zero external UI bloat, and Tailwind CSS."
+image: "/images/gallery/horizontal-4.jpg"
+publishedAt: "2026-08-19"
+tag: "Web Engineering"
+---
+
+## Why We Replaced Monolithic UI Kits with Modular Tailwind Primitives
+
+When building sports analytics tools and personal engineering portfolios, heavy third-party component frameworks often lock you into rigid styling tokens and bloated runtime bundles. By refactoring to **Next.js App Router + strict TypeScript + Tailwind CSS**, every component in `src/components/ui/` is transparent, composable, and easy to extend.
+
+## Clean Separation of Config, Content, and UI
+
+1. **Configuration (`src/resources/site.config.ts`)**: Controls enabled routes, password-protected scouting pages, typography, and background court spotlight effects.
+2. **Typed Content (`src/resources/content.tsx`)**: Holds personal profile metadata, volleyball telemetry metrics, work experience, and gallery items with full TypeScript autocomplete.
+3. **Composable Primitives (`src/components/ui/`)**: Self-contained `Button`, `Badge`, `Carousel`, `Media` (with full-screen Lightbox), `CodeBlock`, and `HeadingNav` components styled with Tailwind CSS variables.
+
+<CodeBlock
+  codes={[
+    {
+      language: "tsx",
+      label: "src/resources/content.tsx",
+      code: `export const person: Person = {
+  firstName: "Jeff",
+  lastName: "Madro",
+  name: "Jeff Madro",
+  role: "AI Engineer & Volleyball Systems Builder",
+  location: "Canada/Mountain",
+  volleyball: {
+    position: "Setter / Opposite Hitter (RS)",
+    playStyle: "Fast-Tempo Side-Out & Computer Vision Rally Analytics",
+    favoriteSystem: "5-1 High-Tempo Offense",
+    courtMetrics: [
+      { label: "Rally Tracking FPS", value: "120 FPS", detail: "Real-time pose inference" }
+    ]
+  }
+};`
+    }
+  ]}
+/>

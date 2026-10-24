@@ -1,25 +1,20 @@
 "use client";
 
-import {
-  AvatarGroup,
-  Carousel,
-  Column,
-  Flex,
-  Heading,
-  SmartLink,
-  Text,
-} from "@once-ui-system/core";
+import React from "react";
+import { AvatarGroup } from "@/components/ui/Avatar";
+import { Carousel } from "@/components/ui/Carousel";
+import { SmartLink } from "@/components/ui/MDXWidgets";
 
 interface ProjectCardProps {
   href: string;
   priority?: boolean;
   images: string[];
   title: string;
-  /** Whether the project has a case study page to link to. */
   hasContent: boolean;
   description: string;
   avatars: { src: string; "aria-label"?: string }[];
   link: string;
+  tag?: string;
 }
 
 export const ProjectCard: React.FC<ProjectCardProps> = ({
@@ -30,62 +25,56 @@ export const ProjectCard: React.FC<ProjectCardProps> = ({
   description,
   avatars,
   link,
+  tag,
 }) => {
   return (
-    <Column fillWidth gap="m">
-      <Carousel
-        sizes="(max-width: 960px) 100vw, 960px"
-        items={images.map((image) => ({
-          slide: image,
-          alt: title,
-        }))}
-      />
-      <Flex
-        s={{ direction: "column" }}
-        fillWidth
-        paddingX="s"
-        paddingTop="12"
-        paddingBottom="24"
-        gap="l"
-      >
+    <article className="group flex w-full flex-col gap-6 rounded-2xl border border-border bg-surface/60 p-4 sm:p-5 transition-all duration-300 hover:border-border-brand hover:shadow-card-hover backdrop-blur-sm">
+      {images.length > 0 && (
+        <Carousel
+          items={images.map((image) => ({
+            slide: image,
+            alt: title,
+          }))}
+        />
+      )}
+
+      <div className="flex w-full flex-col gap-6 px-2 pt-1 pb-2 md:flex-row md:items-start md:justify-between">
         {title && (
-          <Flex flex={5}>
-            <Heading as="h2" wrap="balance" variant="heading-strong-xl">
-              {title}
-            </Heading>
-          </Flex>
-        )}
-        {(avatars?.length > 0 || description?.trim() || hasContent) && (
-          <Column flex={7} gap="16">
-            {avatars?.length > 0 && <AvatarGroup avatars={avatars} size="m" reverse />}
-            {description?.trim() && (
-              <Text wrap="balance" variant="body-default-s" onBackground="neutral-weak">
-                {description}
-              </Text>
+          <div className="flex flex-col gap-2 md:w-5/12">
+            {tag && (
+              <span className="w-fit rounded-full border border-border-brand bg-brand-soft px-3 py-0.5 text-xs font-semibold text-brand">
+                {tag}
+              </span>
             )}
-            <Flex gap="24" wrap>
+            <h2 className="font-heading text-xl sm:text-2xl font-bold tracking-tight text-fg group-hover:text-brand transition-colors">
+              {title}
+            </h2>
+          </div>
+        )}
+
+        {(avatars?.length > 0 || description?.trim() || hasContent || link) && (
+          <div className="flex flex-col gap-4 md:w-7/12">
+            {avatars?.length > 0 && <AvatarGroup avatars={avatars} size="s" reverse />}
+            {description?.trim() && (
+              <p className="text-sm sm:text-base leading-relaxed text-fg-muted">
+                {description}
+              </p>
+            )}
+            <div className="flex flex-wrap items-center gap-6 pt-1 text-sm">
               {hasContent && (
-                <SmartLink
-                  suffixIcon="arrowRight"
-                  style={{ margin: "0", width: "fit-content" }}
-                  href={href}
-                >
-                  <Text variant="body-default-s">Read case study</Text>
+                <SmartLink href={href} suffixIcon="arrowRight">
+                  Read tactical case study
                 </SmartLink>
               )}
               {link && (
-                <SmartLink
-                  suffixIcon="arrowUpRightFromSquare"
-                  style={{ margin: "0", width: "fit-content" }}
-                  href={link}
-                >
-                  <Text variant="body-default-s">View project</Text>
+                <SmartLink href={link} suffixIcon="arrowUpRightFromSquare">
+                  Launch live tool
                 </SmartLink>
               )}
-            </Flex>
-          </Column>
+            </div>
+          </div>
         )}
-      </Flex>
-    </Column>
+      </div>
+    </article>
   );
 };

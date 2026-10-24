@@ -12,6 +12,20 @@ import {
   HiOutlineDocument,
   HiOutlineGlobeAsiaAustralia,
   HiOutlineRocketLaunch,
+  HiOutlineSun,
+  HiOutlineMoon,
+  HiOutlineChevronRight,
+  HiOutlineChevronLeft,
+  HiOutlineChevronDown,
+  HiOutlineCheck,
+  HiOutlineXMark,
+  HiOutlineSparkles,
+  HiOutlineBolt,
+  HiOutlineChartBar,
+  HiOutlineVideoCamera,
+  HiOutlineTrophy,
+  HiOutlineLockClosed,
+  HiOutlineClipboard,
 } from "react-icons/hi2";
 
 import {
@@ -20,9 +34,20 @@ import {
   PiGridFourDuotone,
   PiBookBookmarkDuotone,
   PiImageDuotone,
+  PiVolleyballDuotone,
 } from "react-icons/pi";
 
-import { SiJavascript, SiNextdotjs, SiFigma, SiSupabase } from "react-icons/si";
+import {
+  SiJavascript,
+  SiTypescript,
+  SiNextdotjs,
+  SiTailwindcss,
+  SiPython,
+  SiPytorch,
+  SiOpencv,
+  SiFigma,
+  SiSupabase,
+} from "react-icons/si";
 
 import {
   FaDiscord,
@@ -37,11 +62,28 @@ import {
   FaWhatsapp,
   FaReddit,
   FaTelegram,
+  FaVolleyball,
 } from "react-icons/fa6";
 
 export const iconLibrary = {
   arrowUpRight: HiArrowUpRight,
   arrowRight: HiArrowRight,
+  chevronRight: HiOutlineChevronRight,
+  chevronLeft: HiOutlineChevronLeft,
+  chevronDown: HiOutlineChevronDown,
+  check: HiOutlineCheck,
+  close: HiOutlineXMark,
+  copy: HiOutlineClipboard,
+  lock: HiOutlineLockClosed,
+  light: HiOutlineSun,
+  dark: HiOutlineMoon,
+  sparkles: HiOutlineSparkles,
+  bolt: HiOutlineBolt,
+  chart: HiOutlineChartBar,
+  video: HiOutlineVideoCamera,
+  trophy: HiOutlineTrophy,
+  volleyball: PiVolleyballDuotone,
+  volleyballSolid: FaVolleyball,
   email: HiEnvelope,
   globe: HiOutlineGlobeAsiaAustralia,
   person: PiUserCircleDuotone,
@@ -63,7 +105,12 @@ export const iconLibrary = {
   document: HiOutlineDocument,
   rocket: HiOutlineRocketLaunch,
   javascript: SiJavascript,
+  typescript: SiTypescript,
   nextjs: SiNextdotjs,
+  tailwind: SiTailwindcss,
+  python: SiPython,
+  pytorch: SiPytorch,
+  opencv: SiOpencv,
   supabase: SiSupabase,
   figma: SiFigma,
   facebook: FaFacebook,
@@ -76,9 +123,3 @@ export const iconLibrary = {
 
 export type IconLibrary = typeof iconLibrary;
 export type IconName = keyof IconLibrary;
-
-// Registers the names above with Once UI, so `<Icon name>` and every `icon`
-// prop accept them and a typo is a type error.
-declare module "@once-ui-system/core" {
-  interface IconLibraryOverrides extends Record<IconName, true> {}
-}

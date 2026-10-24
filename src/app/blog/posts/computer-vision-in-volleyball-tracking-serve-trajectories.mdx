@@ -1,0 +1,78 @@
+---
+title: "Computer Vision in Volleyball: Tracking Jump Serve Trajectories & Magnus Drift"
+subtitle: "How aerodynamic spin and 120fps homography reveal why float and topspin serves break so differently"
+summary: "A technical breakdown of modeling volleyball serve aerodynamics with differential equations and tracking 3D trajectories from a single baseline camera."
+image: "/images/gallery/horizontal-1.jpg"
+publishedAt: "2026-10-12"
+tag: "Volleyball AI & Physics"
+---
+
+## Why Volleyball Serves Challenge Standard Object Trackers
+
+A competitive jump topspin serve leaves the server's hand at 26–32 m/s (95–115 km/h), while a hybrid float serve travels at 18–22 m/s with almost zero rotational spin, triggering unpredictable boundary-layer vortex shedding.
+
+<Feedback
+  title="Court Telemetry Insight"
+  description={
+    <>
+      At standard 30fps video, a jump serve moves nearly <InlineCode>1.0 meter per frame</InlineCode>, causing severe motion blur. Switching to 120fps with a 1/1000s shutter speed reduces inter-frame displacement to ~22cm.
+    </>
+  }
+/>
+
+## Modeling the Magnus Force in Flight
+
+During flight, the volleyball experiences gravity, aerodynamic drag, and the **Magnus lift force** caused by topspin or sidespin angular velocity $\vec\omega$:
+
+<div className="my-6 rounded-2xl border border-border-brand bg-brand-soft/40 p-4 text-center font-mono text-sm text-fg">
+  m · (dv/dt) = m·g - ½ · ρ · A · C_d · |v|v + ½ · ρ · A · C_L · (ω × v)
+</div>
+
+Where $\rho$ is air density, $A$ is the cross-sectional area of the volleyball ($r \approx 0.105$ m), $C_d$ is the Reynolds-dependent drag coefficient, and $C_L$ is the spin lift coefficient.
+
+## Comparing Serve Profiles Across 500 Tracked Rallies
+
+<Table
+  data={{
+    headers: ["Serve Type", "Avg Speed (km/h)", "Spin Rate (RPM)", "Vertical Drop Error", "Ace + 0-Pass Rate"],
+    rows: [
+      ["Jump Topspin", "104.2 km/h", "380 - 460 RPM", "-42 cm (steep dive)", "24.8%"],
+      ["Jump Float", "68.5 km/h", "< 25 RPM", "±19 cm lateral drift", "21.3%"],
+      ["Hybrid Top-Float", "82.0 km/h", "90 - 140 RPM", "-24 cm late break", "26.1%"]
+    ]
+  }}
+/>
+
+## Kalman Filtering Across Net Tape Occlusion
+
+When the ball crosses the white net tape, color and contrast gradients momentarily merge. We predict state continuity using a constant-acceleration Kalman state vector in TypeScript:
+
+<CodeBlock
+  highlight="10-15"
+  codes={[
+    {
+      language: "ts",
+      label: "src/analytics/trajectoryFilter.ts",
+      code: `export interface BallState {
+  x: number;
+  y: number;
+  z: number;
+  vx: number;
+  vy: number;
+  vz: number;
+}
+
+export function stepBallPhysics(state: BallState, dt: number): BallState {
+  const g = -9.81;
+  return {
+    x: state.x + state.vx * dt,
+    y: state.y + state.vy * dt,
+    z: Math.max(0, state.z + state.vz * dt + 0.5 * g * dt * dt),
+    vx: state.vx * 0.985,
+    vy: state.vy * 0.985,
+    vz: state.vz + g * dt,
+  };
+}`
+    }
+  ]}
+/>

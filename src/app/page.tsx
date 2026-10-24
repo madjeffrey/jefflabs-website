@@ -1,18 +1,15 @@
+import React from "react";
 import {
-  Heading,
-  Text,
   Button,
   Avatar,
   RevealFx,
-  Column,
   Badge,
-  Row,
   Schema,
   Meta,
-  Line,
-} from "@once-ui-system/core";
-import { home, about, person, baseURL, routes } from "@/resources";
-import { Newsletter } from "@/components";
+  Newsletter,
+  CourtTelemetry,
+} from "@/components";
+import { home, about, person, baseURL, routes, display } from "@/resources";
 import { Projects } from "@/components/work/Projects";
 import { Posts } from "@/components/blog/Posts";
 
@@ -28,7 +25,7 @@ export async function generateMetadata() {
 
 export default function Home() {
   return (
-    <Column maxWidth="m" gap="xl" paddingY="12" horizontal="center">
+    <div className="flex w-full max-w-4xl flex-col items-center gap-16 py-6">
       <Schema
         as="webPage"
         baseURL={baseURL}
@@ -42,100 +39,96 @@ export default function Home() {
           image: `${baseURL}${person.avatar}`,
         }}
       />
-      <Column fillWidth horizontal="center" gap="m">
-        <Column maxWidth="s" horizontal="center" align="center">
-          {home.featured.display && (
-            <RevealFx
-              fillWidth
-              horizontal="center"
-              paddingTop="16"
-              paddingBottom="32"
-              paddingLeft="12"
-            >
-              <Badge
-                background="brand-alpha-weak"
-                paddingX="12"
-                paddingY="4"
-                onBackground="neutral-strong"
-                textVariant="label-default-s"
-                arrow={false}
-                href={home.featured.href}
-              >
-                <Row paddingY="2">{home.featured.title}</Row>
-              </Badge>
-            </RevealFx>
-          )}
-          <RevealFx translateY="4" fillWidth horizontal="center" paddingBottom="16">
-            <Heading wrap="balance" variant="display-strong-l">
-              {home.headline}
-            </Heading>
+
+      <section className="flex w-full max-w-2xl flex-col items-center text-center">
+        {home.featured.display && (
+          <RevealFx className="pb-6 pt-2">
+            <Badge href={home.featured.href} icon="volleyball">
+              {home.featured.title}
+            </Badge>
           </RevealFx>
-          <RevealFx translateY="8" delay={200} fillWidth horizontal="center" paddingBottom="32">
-            <Text wrap="balance" onBackground="neutral-weak" variant="heading-default-xl">
-              {home.subline}
-            </Text>
-          </RevealFx>
-          <RevealFx paddingTop="12" delay={400} horizontal="center" paddingLeft="12">
-            <Button
-              id="about"
-              data-border="rounded"
-              href={about.path}
-              variant="secondary"
-              size="m"
-              weight="default"
-              arrowIcon
-            >
-              <Row gap="8" vertical="center" paddingRight="4">
-                {about.avatar.display && (
-                  <Avatar
-                    marginRight="8"
-                    style={{ marginLeft: "-0.75rem" }}
-                    src={person.avatar}
-                    size="m"
-                    aria-hidden
-                  />
-                )}
-                {about.title}
-              </Row>
-            </Button>
-          </RevealFx>
-        </Column>
-      </Column>
-      <RevealFx translateY="16" delay={600}>
+        )}
+
+        <RevealFx delay={100} className="pb-5">
+          <h1 className="font-heading text-4xl font-extrabold tracking-tight text-fg sm:text-5xl md:text-6xl text-balance leading-[1.1]">
+            {home.headline}
+          </h1>
+        </RevealFx>
+
+        <RevealFx delay={200} className="pb-8">
+          <p className="text-base sm:text-lg md:text-xl leading-relaxed text-fg-muted text-balance">
+            {home.subline}
+          </p>
+        </RevealFx>
+
+        <RevealFx delay={320} className="flex flex-wrap items-center justify-center gap-4">
+          <Button
+            id="about"
+            href={about.path}
+            variant="secondary"
+            size="m"
+            arrowIcon
+          >
+            <span className="flex items-center gap-2.5 pr-1">
+              {about.avatar.display && (
+                <Avatar
+                  src={person.avatar}
+                  size="xs"
+                  aria-hidden
+                  className="-ml-1"
+                />
+              )}
+              <span>{about.title}</span>
+            </span>
+          </Button>
+          <Button
+            href="/work"
+            variant="primary"
+            size="m"
+            prefixIcon="volleyball"
+            label="Explore Volleyball Projects"
+          />
+        </RevealFx>
+      </section>
+
+      {display.courtTelemetry && (
+        <RevealFx delay={420} className="w-full">
+          <CourtTelemetry />
+        </RevealFx>
+      )}
+
+      <RevealFx delay={520} className="w-full">
         <Projects range={[1, 1]} />
       </RevealFx>
+
       {routes["/blog"] && (
-        <Column fillWidth gap="24" marginBottom="l">
-          <Row fillWidth paddingRight="64">
-            <Line maxWidth={48} />
-          </Row>
-          <Row
-            fillWidth
-            gap="24"
-            marginTop="40"
-            s={{ direction: "column", marginTop: "16", gap: "8" }}
-          >
-            <Row
-              flex={1}
-              paddingLeft="l"
-              paddingTop="24"
-              s={{ paddingLeft: "16", paddingTop: "8" }}
-            >
-              <Heading as="h2" variant="display-strong-xs" wrap="balance">
-                Latest from the blog
-              </Heading>
-            </Row>
-            <Row flex={3} paddingX="20" s={{ paddingX: "0" }}>
-              <Posts range={[1, 2]} columns="2" />
-            </Row>
-          </Row>
-          <Row fillWidth paddingLeft="64" horizontal="end">
-            <Line maxWidth={48} />
-          </Row>
-        </Column>
+        <section className="flex w-full flex-col gap-8">
+          <div className="h-px w-full bg-gradient-to-r from-border-brand via-border-strong to-transparent" />
+          <div className="flex flex-col gap-8 lg:flex-row lg:items-start">
+            <div className="lg:w-1/3">
+              <span className="text-xs font-semibold uppercase tracking-wider text-brand">
+                Court & Code Notes
+              </span>
+              <h2 className="mt-1 font-heading text-2xl sm:text-3xl font-bold tracking-tight text-fg text-balance">
+                Latest from the playbook
+              </h2>
+              <p className="mt-2 text-sm text-fg-muted">
+                Deep dives into volleyball biomechanics, 5-1 rotations, and AI telemetry.
+              </p>
+            </div>
+            <div className="lg:w-2/3">
+              <Posts range={[1, 2]} columns="2" direction="column" />
+            </div>
+          </div>
+          <div className="h-px w-full bg-gradient-to-l from-border-brand via-border-strong to-transparent" />
+        </section>
       )}
-      <Projects range={[2]} />
+
+      <section className="w-full">
+        <Projects range={[2]} />
+      </section>
+
       <Newsletter />
-    </Column>
+    </div>
   );
 }

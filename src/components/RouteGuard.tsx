@@ -1,16 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { routes, protectedRoutes } from "@/resources";
-import { Flex, Spinner, Button, Heading, Column, PasswordInput } from "@once-ui-system/core";
+import { Button } from "@/components/ui/Button";
+import { PasswordInput, Spinner } from "@/components/ui/Input";
+import { Icon } from "@/components/ui/Icon";
 import NotFound from "@/app/not-found";
 
 interface RouteGuardProps {
   children: React.ReactNode;
 }
 
-const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
+export const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
   const pathname = usePathname();
   const [isRouteEnabled, setIsRouteEnabled] = useState(false);
   const [isPasswordRequired, setIsPasswordRequired] = useState(false);
@@ -78,9 +80,9 @@ const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
 
   if (loading) {
     return (
-      <Flex fillWidth paddingY="128" horizontal="center">
-        <Spinner />
-      </Flex>
+      <div className="flex w-full items-center justify-center py-32">
+        <Spinner size="l" />
+      </div>
     );
   }
 
@@ -90,25 +92,31 @@ const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
 
   if (isPasswordRequired && !isAuthenticated) {
     return (
-      <Column paddingY="128" maxWidth={24} gap="24" center>
-        <Heading align="center" wrap="balance">
-          This page is password protected
-        </Heading>
-        <Column fillWidth gap="8" horizontal="center">
+      <div className="mx-auto flex w-full max-w-md flex-col items-center gap-6 rounded-3xl border border-border-strong bg-surface p-8 py-16 text-center shadow-glass">
+        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-soft text-brand">
+          <Icon name="lock" size="l" />
+        </div>
+        <h1 className="font-heading text-2xl font-bold text-fg">
+          Protected Playbook Page
+        </h1>
+        <p className="text-sm text-fg-muted">
+          Enter the team access password to view this restricted scouting report or project.
+        </p>
+        <div className="flex w-full flex-col gap-3">
           <PasswordInput
             id="password"
-            label="Password"
+            label="Enter password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             errorMessage={error}
           />
-          <Button onClick={handlePasswordSubmit}>Submit</Button>
-        </Column>
-      </Column>
+          <Button onClick={handlePasswordSubmit} fillWidth>
+            Unlock Content
+          </Button>
+        </div>
+      </div>
     );
   }
 
   return <>{children}</>;
 };
-
-export { RouteGuard };

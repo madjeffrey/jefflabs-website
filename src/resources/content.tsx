@@ -1,28 +1,53 @@
+import React from "react";
 import { About, Blog, Gallery, Home, Newsletter, Person, Social, Work } from "@/types";
-import { Line, Row, Text } from "@once-ui-system/core";
+import { InlineCode } from "@/components/ui/CodeBlock";
 
 const person: Person = {
   firstName: "Jeff",
   lastName: "Madro",
-  name: `Jeff Madro`,
-  role: "Ai Engineer",
+  name: "Jeff Madro",
+  role: "AI Engineer & Volleyball Systems Builder",
   avatar: "/images/profile2.jpg",
   email: "jeffmadro@gmail.com",
-  location: "Canada/Mountain", // Expecting the IANA time zone identifier, e.g., 'Europe/Vienna'
-  languages: ["English", "Bahasa"], // optional: Leave the array empty if you don't want to display languages
-  locale: "en", // BCP 47 language tag for the HTML lang attribute, e.g., 'en', 'ja', 'zh-TW'
+  location: "Canada/Mountain",
+  languages: ["English", "Bahasa"],
+  locale: "en",
+  volleyball: {
+    position: "Setter / Opposite Hitter (RS)",
+    playStyle: "Fast-Tempo Side-Out & Computer Vision Rally Analytics",
+    favoriteSystem: "5-1 High-Tempo Offense",
+    courtMetrics: [
+      {
+        label: "Rally Tracking FPS",
+        value: "120 FPS",
+        detail: "Real-time ball & player pose inference",
+      },
+      {
+        label: "Offense System",
+        value: "5-1 Tempo",
+        detail: "1st-tempo quick & pipe distribution",
+      },
+      {
+        label: "Core Stack",
+        value: "Next.js + AI",
+        detail: "TypeScript, Tailwind CSS, PyTorch",
+      },
+    ],
+  },
 };
 
 const newsletter: Newsletter = {
   display: true,
-  title: <>Subscribe to {person.firstName}'s Newsletter</>,
-  description: <>My weekly newsletter about creativity and engineering</>,
+  title: <>Subscribe to {person.firstName}'s Court & Code Dispatch</>,
+  description: (
+    <>
+      Weekly breakdowns on AI engineering, volleyball biomechanics, computer vision rally
+      analytics, and modern web architecture.
+    </>
+  ),
 };
 
 const social: Social = [
-  // Links are automatically displayed.
-  // Import new icons in /once-ui/icons.ts
-  // Set essentials: true for links you want to show on the about page
   {
     name: "GitHub",
     icon: "github",
@@ -35,18 +60,6 @@ const social: Social = [
     link: "https://www.linkedin.com/in/jeff-mad/?isSelfProfile=true",
     essential: true,
   },
-  // {
-  //   name: "Instagram",
-  //   icon: "instagram",
-  //   link: "https://www.instagram.com/once_ui/",
-  //   essential: false,
-  // },
-  // {
-  //   name: "Threads",
-  //   icon: "threads",
-  //   link: "https://www.threads.com/@once_ui",
-  //   essential: true,
-  // },
   {
     name: "Email",
     icon: "email",
@@ -59,41 +72,57 @@ const home: Home = {
   path: "/",
   image: "/images/og/home.jpg",
   label: "Home",
-  title: `Jeff's Lab`,
-  description: `Portfolio website showcasing my work as a ${person.role}`,
-  headline: <>Building bridges between design and code</>,
+  title: "Jeff's Lab – AI Engineering & Volleyball Analytics",
+  description: `Portfolio website showcasing ${person.name}'s work in AI engineering, volleyball analytics, and modern web systems.`,
+  headline: <>Engineering intelligence from the terminal to the volleyball court</>,
   featured: {
     display: true,
     title: (
-      <Row gap="12" vertical="center">
-        <strong className="ml-4">Once UI</strong>{" "}
-        <Line background="brand-alpha-strong" vert height="20" />
-        <Text marginRight="4" onBackground="brand-medium">
-          Featured work
-        </Text>
-      </Row>
+      <span className="inline-flex items-center gap-2.5">
+        <strong className="text-brand">CourtVision AI</strong>
+        <span className="h-3.5 w-px bg-border-brand" />
+        <span className="text-fg-muted">Real-time rally & spike telemetry</span>
+      </span>
     ),
-    href: "/work/building-once-ui-a-customizable-design-system",
+    href: "/work/courtvision-ai-volleyball-rally-analytics",
   },
   subline: (
     <>
-      I'm {person.firstName}, a {person.role.toLowerCase()} at{" "}
-      <Text as="span" size="xl" weight="strong">
-        ONCE UI
-      </Text>
-      , where I craft intuitive <br /> user experiences. After hours, I build my own projects.
+      I'm {person.firstName}, an AI engineer based in Alberta building intelligent web products,{" "}
+      <InlineCode>computer vision</InlineCode> pipelines, and tactical volleyball analytics tools.
+      When I'm not shipping production code, I'm running a fast-tempo 5-1 offense on the court.
     </>
   ),
+  highlights: [
+    {
+      title: "Vision & Telemetry",
+      metric: "120 FPS",
+      description: "Automated serve velocity, 3D trajectory, and block-jump tracking from match video.",
+      icon: "video",
+    },
+    {
+      title: "Tactical Systems",
+      metric: "5-1 Engine",
+      description: "Interactive rotation visualizers, pass-rating EPV models, and live tournament brackets.",
+      icon: "volleyball",
+    },
+    {
+      title: "Full-Stack AI",
+      metric: "TypeScript + ML",
+      description: "Modular Next.js, Tailwind CSS, and PyTorch architectures engineered for speed.",
+      icon: "bolt",
+    },
+  ],
 };
 
 const about: About = {
   path: "/about",
   label: "About",
   title: `About – ${person.name}`,
-  description: `Meet ${person.name}, ${person.role} from ${person.location}`,
+  description: `Meet ${person.name}, ${person.role} based in ${person.location}`,
   tableOfContent: {
     display: true,
-    subItems: false,
+    subItems: true,
   },
   avatar: {
     display: true,
@@ -107,53 +136,61 @@ const about: About = {
     title: "Introduction",
     description: (
       <>
-        {person.firstName} is a {person.location.split("/")[1]?.replace("_", " ")}-based{" "}
-        {person.role.toLowerCase()} with a passion for transforming complex challenges into simple,
-        elegant design solutions. Their work spans digital interfaces, interactive experiences, and
-        the convergence of design and technology.
+        <p>
+          {person.firstName} is a Mountain-time-based AI engineer and competitive volleyball player
+          who loves turning complex data and fast-moving physical systems into intuitive digital
+          products. Whether architecting low-latency LLM workflows or analyzing six-rotation
+          side-out efficiency, his work focuses on precision, modularity, and human-centered
+          performance.
+        </p>
+        <p>
+          Outside of software engineering, {person.firstName} competes in indoor and beach
+          volleyball leagues, building open-source court telemetry tools that help coaches and
+          athletes visualize setter distribution, serve receive seams, and vertical jump mechanics.
+        </p>
       </>
     ),
   },
   work: {
-    display: true, // set to false to hide this section
-    title: "Work Experience",
+    display: true,
+    title: "Work & Court Experience",
     experiences: [
       {
-        company: "FLY",
-        timeframe: "2022 - Present",
-        role: "Senior Design Engineer",
+        company: "JeffLabs AI & Sports Telemetry",
+        timeframe: "2023 - Present",
+        role: "Founder & Lead AI Engineer",
         achievements: [
           <>
-            Redesigned the UI/UX for the FLY platform, resulting in a 20% increase in user
-            engagement and 30% faster load times.
+            Engineered <strong>CourtVision AI</strong>, a computer vision rally analysis pipeline
+            that extracts serve velocity, attack angles, and defensive digging heatmaps from single
+            baseline camera feeds.
           </>,
           <>
-            Spearheaded the integration of AI tools into design workflows, enabling designers to
-            iterate 50% faster.
+            Architected modular Next.js, TypeScript, and Tailwind CSS web applications for club
+            tournament scheduling, 5-1 rotation training, and live match stat tracking.
           </>,
         ],
         images: [
-          // optional: leave the array empty if you don't want to display images
           {
             src: "/images/projects/project-01/cover-01.jpg",
-            alt: "Once UI Project",
+            alt: "CourtVision AI Rally Analytics Dashboard",
             width: 16,
             height: 9,
           },
         ],
       },
       {
-        company: "Creativ3",
-        timeframe: "2018 - 2022",
-        role: "Lead Designer",
+        company: "Apex Volley Tech Collective",
+        timeframe: "2020 - 2023",
+        role: "Full-Stack & Machine Learning Engineer",
         achievements: [
           <>
-            Developed a design system that unified the brand across multiple platforms, improving
-            design consistency by 40%.
+            Built an expected side-out value (EPV) statistical model correlating 0–3 serve-receive
+            pass ratings with first-ball kill percentages across 1,200+ competitive sets.
           </>,
           <>
-            Led a cross-functional team to launch a new product line, contributing to a 15% increase
-            in overall company revenue.
+            Led front-end architecture migration to a modular TypeScript + Tailwind CSS component
+            system, cutting bundle size by 38% and improving live scoreboard latency.
           </>,
         ],
         images: [],
@@ -161,70 +198,79 @@ const about: About = {
     ],
   },
   studies: {
-    display: true, // set to false to hide this section
-    title: "Studies",
+    display: true,
+    title: "Studies & Certifications",
     institutions: [
       {
-        name: "University of Jakarta",
-        description: <>Studied software engineering.</>,
+        name: "Software Engineering & Machine Learning",
+        description: (
+          <>
+            Focused on computer vision, deep learning architectures, distributed systems, and
+            full-stack web engineering.
+          </>
+        ),
       },
       {
-        name: "Build the Future",
-        description: <>Studied online marketing and personal branding.</>,
+        name: "Volleyball Coaching & Biomechanics Analytics",
+        description: (
+          <>
+            Applied study in 5-1/6-2 offensive systems, approach jump kinematics, and data-driven
+            match scouting.
+          </>
+        ),
       },
     ],
   },
   technical: {
-    display: true, // set to false to hide this section
-    title: "Technical skills",
+    display: true,
+    title: "Technical Skills",
     skills: [
       {
-        title: "Figma",
-        description: <>Able to prototype in Figma with Once UI with unnatural speed.</>,
+        title: "AI & Computer Vision Telemetry",
+        description: (
+          <>
+            Designing real-time object detection, ball trajectory tracking, and pose estimation
+            pipelines for high-speed volleyball rally video analysis.
+          </>
+        ),
         tags: [
-          {
-            name: "Figma",
-            icon: "figma",
-          },
+          { name: "Python", icon: "python" },
+          { name: "PyTorch", icon: "pytorch" },
+          { name: "OpenCV", icon: "opencv" },
         ],
-        // optional: leave the array empty if you don't want to display images
         images: [
           {
             src: "/images/projects/project-01/cover-02.jpg",
-            alt: "Project image",
+            alt: "Volleyball trajectory and court zone heatmaps",
             width: 16,
             height: 9,
           },
           {
             src: "/images/projects/project-01/cover-03.jpg",
-            alt: "Project image",
+            alt: "Pose estimation and jump telemetry visualization",
             width: 16,
             height: 9,
           },
         ],
       },
       {
-        title: "Next.js",
-        description: <>Building next gen apps with Next.js + Once UI + Supabase.</>,
+        title: "Modern Web Architecture (Next.js, TypeScript & Tailwind)",
+        description: (
+          <>
+            Building modular, accessible, and fast web applications with Next.js App Router, strict
+            TypeScript, Tailwind CSS, and real-time Supabase backends.
+          </>
+        ),
         tags: [
-          {
-            name: "JavaScript",
-            icon: "javascript",
-          },
-          {
-            name: "Next.js",
-            icon: "nextjs",
-          },
-          {
-            name: "Supabase",
-            icon: "supabase",
-          },
+          { name: "TypeScript", icon: "typescript" },
+          { name: "Next.js", icon: "nextjs" },
+          { name: "Tailwind CSS", icon: "tailwind" },
+          { name: "Supabase", icon: "supabase" },
         ],
-        // optional: leave the array empty if you don't want to display images
         images: [
           {
             src: "/images/projects/project-01/cover-04.jpg",
-            alt: "Project image",
+            alt: "SpikeFlow live tournament and rotation interface",
             width: 16,
             height: 9,
           },
@@ -237,68 +283,70 @@ const about: About = {
 const blog: Blog = {
   path: "/blog",
   label: "Blog",
-  title: "Writing about design and tech...",
-  description: `Read what ${person.name} has been up to recently`,
-  // Create new blog posts by adding a new .mdx file to app/blog/posts
-  // All posts will be listed on the /blog route
+  title: "Volleyball Analytics, Court Tactics & AI Engineering",
+  description: `Articles and technical breakdowns by ${person.name} on volleyball strategy, sports biomechanics, and software engineering.`,
 };
 
 const work: Work = {
   path: "/work",
-  label: "Work",
-  title: `Projects – ${person.name}`,
-  description: `Design and dev projects by ${person.name}`,
-  // Create new project pages by adding a new .mdx file to app/blog/posts
-  // All projects will be listed on the /home and /work routes
+  label: "Projects",
+  title: `Volleyball & AI Projects – ${person.name}`,
+  description: `Volleyball analytics platforms, computer vision pipelines, and web applications built by ${person.name}.`,
 };
 
 const gallery: Gallery = {
   path: "/gallery",
-  label: "Gallery",
-  title: `Photo gallery – ${person.name}`,
-  description: `A photo collection by ${person.name}`,
-  // Images by https://lorant.one
-  // These are placeholder images, replace with your own
+  label: "Court Gallery",
+  title: `Court & Lab Gallery – ${person.name}`,
+  description: `Snapshots from tournaments, training sessions, and engineering builds by ${person.name}.`,
   images: [
     {
       src: "/images/gallery/horizontal-1.jpg",
-      alt: "image",
+      alt: "Championship point rally under arena lights",
       orientation: "horizontal",
+      caption: "Championship Finals — High-tempo pipe attack from Zone 6",
     },
     {
       src: "/images/gallery/vertical-4.jpg",
-      alt: "image",
+      alt: "Double block timing at the net",
       orientation: "vertical",
+      caption: "Closing the seam on a quick middle attack",
     },
     {
       src: "/images/gallery/horizontal-3.jpg",
-      alt: "image",
+      alt: "CourtVision AI camera calibration setup",
       orientation: "horizontal",
+      caption: "Baseline 120fps camera rig for serve trajectory tracking",
     },
     {
       src: "/images/gallery/vertical-1.jpg",
-      alt: "image",
+      alt: "Jump serve toss mechanics",
       orientation: "vertical",
+      caption: "Topspin jump serve approach from Zone 1",
     },
     {
       src: "/images/gallery/vertical-2.jpg",
-      alt: "image",
+      alt: "Setter hands and quick release training",
       orientation: "vertical",
+      caption: "Neutral setter posture for deceptive 1st-tempo distribution",
     },
     {
       src: "/images/gallery/horizontal-2.jpg",
-      alt: "image",
+      alt: "Beach 2v2 tournament sunset match",
       orientation: "horizontal",
+      caption: "Summer 2v2 sand series — reading wind drift on float serves",
     },
     {
       src: "/images/gallery/horizontal-4.jpg",
-      alt: "image",
+      alt: "Post-match telemetry review with the squad",
       orientation: "horizontal",
+      caption: "Reviewing side-out efficiency and pass ratings between sets",
     },
     {
       src: "/images/gallery/vertical-3.jpg",
-      alt: "image",
+      alt: "Libero split-step defensive stance",
       orientation: "vertical",
+      caption: "Perimeter defensive read in Zone 5",
     },
   ],
 };

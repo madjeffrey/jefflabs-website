@@ -1,25 +1,25 @@
 "use client";
 
+import React, { useState } from "react";
 import { newsletter, newsletterForm } from "@/resources";
-import { Button, Heading, Input, Text, Background, Column, Row } from "@once-ui-system/core";
-import { Opacity, SpacingToken } from "@once-ui-system/core";
-import { useState } from "react";
-
-// Aveiro's public subscribe endpoint: accepts signups from any site allowed on the embed form.
-const subscribeURL = "https://www.aveiro.app/api/email/subscribe";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { BackgroundEffects } from "@/components/ui/BackgroundEffects";
+import { Icon } from "@/components/ui/Icon";
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 async function subscribe(email: string): Promise<string> {
-  if (!newsletterForm.aveiroEmbedId) {
-    return "Signups aren't connected yet: add your Aveiro embed form ID in once-ui.config.ts.";
+  if (!newsletterForm.embedId && !newsletterForm.endpointUrl) {
+    await new Promise((resolve) => setTimeout(resolve, 450));
+    return "";
   }
   try {
-    const res = await fetch(subscribeURL, {
+    const res = await fetch(newsletterForm.endpointUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        embedPublicId: newsletterForm.aveiroEmbedId,
+        embedPublicId: newsletterForm.embedId,
         email,
         sourcePath: window.location.pathname,
         referrer: document.referrer || undefined,
@@ -27,16 +27,13 @@ async function subscribe(email: string): Promise<string> {
     });
     if (res.ok) return "";
     if (res.status === 400) return "Please enter a valid email address.";
-    if (res.status === 404)
-      return "This newsletter form wasn't found in Aveiro: check the embed form ID.";
-    if (res.status === 403) return "This site isn't allowed on the Aveiro embed form yet.";
     return "Something went wrong. Please try again.";
   } catch {
     return "Something went wrong. Please try again.";
   }
 }
 
-export const Newsletter: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }) => {
+export const Newsletter: React.FC<{ className?: string }> = ({ className = "" }) => {
   const [error, setError] = useState<string>("");
   const [submitted, setSubmitted] = useState<boolean>(false);
   const [sending, setSending] = useState<boolean>(false);
@@ -47,98 +44,56 @@ export const Newsletter: React.FC<React.ComponentProps<typeof Column>> = ({ ...f
   if (newsletter.display === false) return null;
 
   return (
-    <Column
-      overflow="hidden"
-      fillWidth
-      padding="xl"
-      radius="l"
-      marginBottom="m"
-      horizontal="center"
-      align="center"
-      background="surface"
-      border="neutral-alpha-weak"
-      {...flex}
+    <section
+      className={`relative my-8 flex w-full flex-col items-center overflow-hidden rounded-2xl border border-border-brand bg-surface px-6 py-12 text-center shadow-glass backdrop-blur-md sm:px-12 ${className}`.trim()}
     >
-      <Background
-        top="0"
-        position="absolute"
-        mask={{
-          x: newsletterForm.effects.mask.x,
-          y: newsletterForm.effects.mask.y,
-          radius: newsletterForm.effects.mask.radius,
-          cursor: newsletterForm.effects.mask.cursor,
-        }}
-        gradient={{
-          display: newsletterForm.effects.gradient.display,
-          opacity: newsletterForm.effects.gradient.opacity as Opacity,
-          x: newsletterForm.effects.gradient.x,
-          y: newsletterForm.effects.gradient.y,
-          width: newsletterForm.effects.gradient.width,
-          height: newsletterForm.effects.gradient.height,
-          tilt: newsletterForm.effects.gradient.tilt,
-          colorStart: newsletterForm.effects.gradient.colorStart,
-          colorEnd: newsletterForm.effects.gradient.colorEnd,
-        }}
-        dots={{
-          display: newsletterForm.effects.dots.display,
-          opacity: newsletterForm.effects.dots.opacity as Opacity,
-          size: newsletterForm.effects.dots.size as SpacingToken,
-          color: newsletterForm.effects.dots.color,
-        }}
-        grid={{
-          display: newsletterForm.effects.grid.display,
-          opacity: newsletterForm.effects.grid.opacity as Opacity,
-          color: newsletterForm.effects.grid.color,
-          width: newsletterForm.effects.grid.width,
-          height: newsletterForm.effects.grid.height,
-        }}
-        lines={{
-          display: newsletterForm.effects.lines.display,
-          opacity: newsletterForm.effects.lines.opacity as Opacity,
-          size: newsletterForm.effects.lines.size as SpacingToken,
-          thickness: newsletterForm.effects.lines.thickness,
-          angle: newsletterForm.effects.lines.angle,
-          color: newsletterForm.effects.lines.color,
-        }}
-      />
-      <Column maxWidth="xs" horizontal="center">
-        <Heading marginBottom="s" variant="display-strong-xs">
+      <BackgroundEffects effects={newsletterForm.effects} contained />
+
+      <div className="relative z-10 flex max-w-lg flex-col items-center gap-3">
+        <span className="inline-flex items-center gap-1.5 rounded-full border border-border-brand bg-brand-soft px-3 py-1 text-xs font-semibold text-brand">
+          <Icon name="volleyball" size="xs" />
+          <span>Court & Code Dispatch</span>
+        </span>
+        <h2 className="font-heading text-2xl font-bold tracking-tight text-fg sm:text-3xl">
           {newsletter.title}
-        </Heading>
-        <Text wrap="balance" marginBottom="l" variant="body-default-l" onBackground="neutral-weak">
+        </h2>
+        <p className="text-sm sm:text-base text-fg-muted leading-relaxed">
           {newsletter.description}
-        </Text>
-      </Column>
-      {submitted ? (
-        <Text variant="body-default-m" onBackground="brand-medium" role="status">
-          Thanks for subscribing!
-        </Text>
-      ) : (
-        <form
-          style={{ width: "100%", display: "flex", justifyContent: "center" }}
-          noValidate
-          onSubmit={async (e) => {
-            e.preventDefault();
-            const email = String(new FormData(e.currentTarget).get("email") ?? "").trim();
-            const message = email ? validate(email) : "Please enter your email address.";
-            if (message) {
-              setError(message);
-              return;
-            }
-            setError("");
-            setSending(true);
-            const failure = await subscribe(email);
-            setSending(false);
-            if (failure) setError(failure);
-            else setSubmitted(true);
-          }}
-        >
-          <Row fillWidth maxWidth={24} s={{ direction: "column" }} gap="8">
+        </p>
+
+        {submitted ? (
+          <div
+            role="status"
+            className="mt-4 inline-flex items-center gap-2 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-5 py-2.5 text-sm font-medium text-emerald-400"
+          >
+            <Icon name="check" size="s" />
+            <span>You're on the roster! Thanks for subscribing.</span>
+          </div>
+        ) : (
+          <form
+            noValidate
+            onSubmit={async (e) => {
+              e.preventDefault();
+              const email = String(new FormData(e.currentTarget).get("email") ?? "").trim();
+              const message = email ? validate(email) : "Please enter your email address.";
+              if (message) {
+                setError(message);
+                return;
+              }
+              setError("");
+              setSending(true);
+              const failure = await subscribe(email);
+              setSending(false);
+              if (failure) setError(failure);
+              else setSubmitted(true);
+            }}
+            className="mt-4 flex w-full max-w-md flex-col gap-3 sm:flex-row sm:items-start"
+          >
             <Input
               id="newsletter-email"
               name="email"
               type="email"
-              label="Email"
+              label="Enter your email"
               autoComplete="email"
               required
               onChange={(e) => {
@@ -147,14 +102,12 @@ export const Newsletter: React.FC<React.ComponentProps<typeof Column>> = ({ ...f
               onBlur={(e) => setError(validate(e.target.value))}
               errorMessage={error}
             />
-            <Row height="48" vertical="center">
-              <Button type="submit" size="m" fillWidth loading={sending} disabled={sending}>
-                Subscribe
-              </Button>
-            </Row>
-          </Row>
-        </form>
-      )}
-    </Column>
+            <Button type="submit" size="m" loading={sending} disabled={sending} className="shrink-0 py-2.5">
+              Subscribe
+            </Button>
+          </form>
+        )}
+      </div>
+    </section>
   );
 };

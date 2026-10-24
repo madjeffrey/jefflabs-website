@@ -1,0 +1,35 @@
+---
+title: "SpikeFlow: Interactive 5-1 Rotation Visualizer & Tournament Engine"
+publishedAt: "2026-07-22"
+summary: "Modular web platform for visualizing 5-1 and 6-2 volleyball offensive rotations, overlap rules, serve-receive patterns, and live pool-play tournament brackets."
+tag: "Tactical Web App"
+images:
+  - "/images/projects/project-01/cover-02.jpg"
+  - "/images/projects/project-01/image-03.jpg"
+team:
+  - name: "Jeff Madro"
+    role: "Lead Engineer"
+    avatar: "/images/profile2.jpg"
+    linkedIn: "https://www.linkedin.com/in/jeff-mad/?isSelfProfile=true"
+link: "https://github.com/madjeffrey"
+---
+
+## Overview
+
+Teaching rotational overlap rules and serve-receive transitions in a **5-1 offensive system** on a static whiteboard often leaves players confused about when they can release to their base positions. **SpikeFlow** brings the tactical clipboard to life with smooth state transitions, overlap validation, and an integrated tournament bracket engine.
+
+## Key Features
+
+- **Live Overlap Validator**: Automatically checks FIVB/Volleyball Canada rotational legality (front-to-back and left-to-right positional constraints) before the serve is contacted.
+- **Phase State Machine**: Smoothly animates all 6 players across four rally phases: *Serve Receive Stack*, *Setter Release & Approach*, *Base Defense (Perimeter/Rotational)*, and *Transition Counter-Attack*.
+- **Real-Time Pool Play & Bracket Scoring**: Mobile-first courtside scorekeeper that calculates set/point differentials and updates elimination brackets instantly.
+
+## Technologies Used
+
+- **Next.js App Router & TypeScript**: Strongly-typed state machines for rotations P1 through P6.
+- **Tailwind CSS**: Hardware-accelerated court transitions and responsive mobile scoreboards.
+- **Supabase Realtime**: Synchronizes live court scores and tactical board states across coaching staff devices.
+
+## Outcome
+
+Adopted by local club and adult competitive squads to onboard new players into 5-1 and 6-2 systems in half the practice time.

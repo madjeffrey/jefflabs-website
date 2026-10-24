@@ -1,40 +1,26 @@
-import { Row, IconButton, SmartLink, Text } from "@once-ui-system/core";
+import React from "react";
+import { IconButton } from "@/components/ui/Button";
+import { Icon } from "@/components/ui/Icon";
 import { display, person, social } from "@/resources";
 import { ThemeToggle } from "./ThemeToggle";
-import styles from "./Footer.module.scss";
 
-export const Footer = () => {
+export const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <Row as="footer" fillWidth padding="8" horizontal="center" s={{ direction: "column" }}>
-      <Row
-        className={styles.mobile}
-        maxWidth="m"
-        paddingY="8"
-        paddingX="16"
-        gap="16"
-        horizontal="between"
-        vertical="center"
-        s={{
-          direction: "column",
-          horizontal: "center",
-          align: "center",
-        }}
-      >
-        <Row
-          vertical="center"
-          gap="8"
-          wrap
-          s={{ horizontal: "center", align: "center" }}
-        >
-          <Text variant="body-default-s" onBackground="neutral-strong">
-            <Text onBackground="neutral-weak">© {currentYear} /</Text>
-            <Text paddingX="4">{person.name}</Text>
-          </Text>
+    <footer className="w-full border-t border-border/60 px-4 py-8 pb-24 md:pb-8">
+      <div className="mx-auto flex max-w-4xl flex-col items-center justify-between gap-4 sm:flex-row">
+        <div className="flex flex-wrap items-center justify-center gap-2 text-xs sm:text-sm text-fg-muted">
+          <Icon name="volleyball" size="s" className="text-brand" />
+          <span>© {currentYear}</span>
+          <span className="text-border-strong">/</span>
+          <span className="font-semibold text-fg">{person.name}</span>
+          <span className="text-border-strong">•</span>
+          <span className="text-fg-subtle">Engineered for the Court & Web</span>
           {display.themeSwitcher && <ThemeToggle size="s" />}
-        </Row>
-        <Row gap="16">
+        </div>
+
+        <div className="flex items-center gap-2">
           {social.map(
             (item) =>
               item.link && (
@@ -48,9 +34,8 @@ export const Footer = () => {
                 />
               ),
           )}
-        </Row>
-      </Row>
-      <Row height="80" hide s={{ hide: false }} />
-    </Row>
+        </div>
+      </div>
+    </footer>
   );
 };

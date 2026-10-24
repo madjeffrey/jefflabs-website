@@ -1,7 +1,7 @@
-import { Column, Heading, Meta, Schema } from "@once-ui-system/core";
-import { Newsletter } from "@/components";
+import React from "react";
+import { Meta, Schema, Newsletter, Icon } from "@/components";
 import { Posts } from "@/components/blog/Posts";
-import { baseURL, blog, person, newsletter } from "@/resources";
+import { baseURL, blog, person } from "@/resources";
 
 export async function generateMetadata() {
   return Meta.generate({
@@ -15,7 +15,7 @@ export async function generateMetadata() {
 
 export default function Blog() {
   return (
-    <Column maxWidth="m" paddingTop="24">
+    <div className="flex w-full max-w-4xl flex-col gap-10 py-6">
       <Schema
         as="blogPosting"
         baseURL={baseURL}
@@ -29,18 +29,27 @@ export default function Blog() {
           image: `${baseURL}${person.avatar}`,
         }}
       />
-      <Heading marginBottom="l" variant="heading-strong-xl" marginLeft="24">
-        {blog.title}
-      </Heading>
-      <Column fillWidth flex={1} gap="40" s={{ gap: "24" }}>
+
+      <header className="flex flex-col gap-2">
+        {/* <span className="inline-flex w-fit items-center gap-1.5 rounded-full border border-border-brand bg-brand-soft px-3 py-1 text-xs font-semibold text-brand">
+          <Icon name="volleyball" size="xs" />
+          <span>Tactical Playbook & Engineering Blog</span>
+        </span> */}
+        <h1 className="font-heading text-3xl sm:text-4xl font-extrabold tracking-tight text-fg">
+          {blog.title}
+        </h1>
+        {/* <p className="text-sm sm:text-base text-fg-muted">{blog.description}</p> */}
+      </header>
+
+      <div className="flex flex-col gap-8">
         <Posts range={[1, 1]} thumbnail />
         <Posts range={[2, 3]} columns="2" thumbnail direction="column" />
-        <Newsletter marginBottom="l" />
-        <Heading as="h2" variant="heading-strong-xl" marginLeft="l">
+        <Newsletter />
+        <h2 className="font-heading text-2xl font-bold tracking-tight text-fg pt-2">
           Earlier posts
-        </Heading>
-        <Posts range={[4]} columns="2" />
-      </Column>
-    </Column>
+        </h2>
+        <Posts range={[4]} columns="2" direction="column" />
+      </div>
+    </div>
   );
 }

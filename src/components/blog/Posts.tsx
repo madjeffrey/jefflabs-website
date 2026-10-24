@@ -1,5 +1,5 @@
+import React from "react";
 import { getPosts } from "@/utils/utils";
-import { Grid } from "@once-ui-system/core";
 import Post from "./Post";
 
 interface PostsProps {
@@ -19,7 +19,6 @@ export function Posts({
 }: PostsProps) {
   let allBlogs = getPosts(["src", "app", "blog", "posts"]);
 
-  // Exclude by slug (exact match)
   if (exclude.length) {
     allBlogs = allBlogs.filter((post) => !exclude.includes(post.slug));
   }
@@ -32,26 +31,25 @@ export function Posts({
     ? sortedBlogs.slice(range[0] - 1, range.length === 2 ? range[1] : sortedBlogs.length)
     : sortedBlogs;
 
+  const gridCols =
+    columns === "3"
+      ? "grid-cols-1 md:grid-cols-3"
+      : columns === "2"
+        ? "grid-cols-1 md:grid-cols-2"
+        : "grid-cols-1";
+
+  if (displayedBlogs.length === 0) return null;
+
   return (
-    <>
-      {displayedBlogs.length > 0 && (
-        <Grid
-          columns={columns}
-          s={{ columns: 1, marginBottom: "8" }}
-          fillWidth
-          marginBottom="40"
-          gap="16"
-        >
-          {displayedBlogs.map((post) => (
-            <Post
-              key={post.slug}
-              post={{ slug: post.slug, metadata: post.metadata }}
-              thumbnail={thumbnail}
-              direction={direction}
-            />
-          ))}
-        </Grid>
-      )}
-    </>
+    <div className={`grid w-full gap-5 ${gridCols}`}>
+      {displayedBlogs.map((post) => (
+        <Post
+          key={post.slug}
+          post={{ slug: post.slug, metadata: post.metadata }}
+          thumbnail={thumbnail}
+          direction={direction}
+        />
+      ))}
+    </div>
   );
 }

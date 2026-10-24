@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { ToggleButton, useTheme } from "@once-ui-system/core";
+import { ToggleButton } from "@/components/ui/Button";
+import { useTheme } from "@/components/Providers";
 
 interface ThemeToggleProps {
   size?: "s" | "m" | "l" | "xl";
@@ -56,7 +57,6 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
     setTheme(next);
   };
 
-  // If currently dark, show sun icon to switch to light; if light, show moon icon to switch to dark
   const icon = currentTheme === "dark" ? "light" : "dark";
   const label =
     currentTheme === "dark" ? "Switch to light mode" : "Switch to dark mode";

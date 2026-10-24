@@ -1,39 +1,18 @@
-import {
-  BorderStyle,
-  NeutralColor,
-  ScalingSize,
-  Schemes,
-  SolidStyle,
-  SolidType,
-  SurfaceStyle,
-  Theme,
-  TransitionStyle,
-} from "@once-ui-system/core";
-import type { ChartMode, ChartVariant } from "@once-ui-system/core/data";
 import { NextFontWithVariable } from "next/dist/compiled/@next/font";
 
-/**
- * Display configuration for UI elements.
- */
+export type ThemeMode = "dark" | "light" | "system";
+export type BrandScheme = "orange" | "amber" | "sky" | "emerald" | "rose" | "red";
+
 export type DisplayConfig = {
   location: boolean;
   time: boolean;
   themeSwitcher: boolean;
+  courtTelemetry?: boolean;
 };
 
-/**
- * Route configuration for enabled/disabled routes.
- */
 export type RoutesConfig = Record<`/${string}`, boolean>;
-
-/**
- * Protected route configuration.
- */
 export type ProtectedRoutesConfig = Record<`/${string}`, boolean>;
 
-/**
- * Font configuration for each variant.
- */
 export type FontsConfig = {
   heading: NextFontWithVariable;
   body: NextFontWithVariable;
@@ -41,42 +20,14 @@ export type FontsConfig = {
   code: NextFontWithVariable;
 };
 
-/**
- * Style customization for main layout.
- */
 export type StyleConfig = {
-  theme: Theme;
-  neutral: NeutralColor;
-  brand: Schemes;
-  accent: Schemes;
-  solid: SolidType;
-  solidStyle: SolidStyle;
-  border: BorderStyle;
-  surface: SurfaceStyle;
-  transition: TransitionStyle;
-  scaling: ScalingSize;
+  theme: ThemeMode;
+  brand: BrandScheme;
+  accent: BrandScheme;
+  rounded: "playful" | "rounded" | "sharp";
+  surface: "translucent" | "solid";
 };
 
-/**
- * Data style configuration for charts.
- */
-export type DataStyleConfig = {
-  variant: ChartVariant;
-  mode: ChartMode;
-  height: number;
-  axis: {
-    stroke: string;
-  };
-  tick: {
-    fill: string;
-    fontSize: number;
-    line: boolean;
-  };
-};
-
-/**
- * Effects configuration for UI visuals.
- */
 export type EffectsConfig = {
   mask: {
     cursor: boolean;
@@ -118,17 +69,12 @@ export type EffectsConfig = {
   };
 };
 
-/**
- * Newsletter signup form, backed by an Aveiro embed form.
- */
 export type NewsletterFormConfig = {
-  aveiroEmbedId: string;
+  endpointUrl: string;
+  embedId: string;
   effects: EffectsConfig;
 };
 
-/**
- * Schema data for SEO/meta tags.
- */
 export type SchemaConfig = {
   logo: string;
   type: string;
@@ -137,18 +83,13 @@ export type SchemaConfig = {
   email: string;
 };
 
-/**
- * Social links for organization.
- */
 export type SameAsConfig = {
   threads: string;
   linkedin: string;
   discord: string;
+  github?: string;
 };
 
-/**
- * Social sharing configuration for blog posts.
- */
 export type SocialSharingConfig = {
   display: boolean;
   platforms: {
@@ -164,10 +105,7 @@ export type SocialSharingConfig = {
   };
 };
 
-/**
- * Top-level config types for once-ui.config.js
- */
-export type OnceUIConfig = {
+export type SiteConfig = {
   display: DisplayConfig;
   newsletterForm: NewsletterFormConfig;
   routes: RoutesConfig;
@@ -179,5 +117,4 @@ export type OnceUIConfig = {
   sameAs: SameAsConfig;
   socialSharing: SocialSharingConfig;
   effects: EffectsConfig;
-  dataStyle: DataStyleConfig;
 };

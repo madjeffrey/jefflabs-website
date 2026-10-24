@@ -1,4 +1,5 @@
-import { Column, Heading, Meta, Schema } from "@once-ui-system/core";
+import React from "react";
+import { Meta, Schema, Icon } from "@/components";
 import { baseURL, about, person, work } from "@/resources";
 import { Projects } from "@/components/work/Projects";
 
@@ -14,7 +15,7 @@ export async function generateMetadata() {
 
 export default function Work() {
   return (
-    <Column maxWidth="m" paddingTop="24">
+    <div className="flex w-full max-w-4xl flex-col gap-10 py-6">
       <Schema
         as="webPage"
         baseURL={baseURL}
@@ -28,10 +29,21 @@ export default function Work() {
           image: `${baseURL}${person.avatar}`,
         }}
       />
-      <Heading marginBottom="l" variant="heading-strong-xl" align="center">
-        {work.title}
-      </Heading>
+
+      <header className="flex flex-col items-center text-center gap-3">
+        <span className="inline-flex items-center gap-1.5 rounded-full border border-border-brand bg-brand-soft px-3.5 py-1 text-xs font-semibold text-brand">
+          <Icon name="volleyball" size="xs" />
+          <span>Volleyball Systems & AI Builds</span>
+        </span>
+        <h1 className="font-heading text-3xl sm:text-4xl font-extrabold tracking-tight text-fg">
+          {work.title}
+        </h1>
+        <p className="max-w-xl text-sm sm:text-base text-fg-muted">
+          {work.description}
+        </p>
+      </header>
+
       <Projects />
-    </Column>
+    </div>
   );
 }

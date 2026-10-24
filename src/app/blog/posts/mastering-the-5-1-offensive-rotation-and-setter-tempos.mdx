@@ -1,0 +1,51 @@
+---
+title: "Mastering the 5-1 Offensive Rotation: Setter Tempos & Overlap Geometry"
+subtitle: "From Rotation 1 stack releases to first-tempo middle quicks and back-row pipe attacks"
+summary: "A tactical guide to all six rotations in a 5-1 volleyball offense, breaking down setter release routes, overlap constraints, and tempo combinations."
+image: "/images/gallery/horizontal-2.jpg"
+publishedAt: "2026-09-28"
+tag: "Tactics & Rotations"
+---
+
+## Why the 5-1 Remains the Gold Standard
+
+In a **5-1 offensive system**, a single setter orchestrates the offense across all six rotations—operating as a back-row setter with **three front-row attackers** in three rotations (P1, P6, P5) and as a front-row setter with **two front-row attackers** plus a back-row Opposite/Pipe option in the other three (P4, P3, P2).
+
+## Understanding Offensive Tempo
+
+Modern volleyball offense is built on **tempo**—synchronizing the hitter's approach steps with the setter's hands to beat the opposing middle blocker:
+
+<AccordionGroup>
+  <Accordion title="1st Tempo (51 / Quick / 31 Shoot)" defaultOpen={true}>
+    The middle blocker is already airborne or planting their penultimate step **as the ball touches the setter's hands**. This forces the opposing middle blocker to commit before reading the set direction, opening 1-on-1 seams for the pin hitters.
+  </Accordion>
+  <Accordion title="2nd Tempo (Hut / Go / Back-Row Pipe & D-Ball)">
+    The hitter takes their first directional step as the pass peaks, contacting a fast, flat trajectory at the antenna or out of Zone 6 (Pipe) before the double block can fully close the seam.
+  </Accordion>
+  <Accordion title="3rd Tempo (High Out-of-System Ball)">
+    Used when a pass is pushed off the net (1-rating pass). High apex gives the outside hitter or opposite time to adjust their footwork and tool the outside hand of a set block.
+  </Accordion>
+</AccordionGroup>
+
+## Rotational Overlap Rules in Code
+
+In SpikeFlow, we verify whether a serve-receive formation is legal by checking each player's coordinates against their adjacent front/back and left/right neighbors at the moment of service contact:
+
+<CodeBlock
+  codes={[
+    {
+      language: "ts",
+      label: "src/tactics/overlapCheck.ts",
+      code: `export type PositionSlot = "P1" | "P2" | "P3" | "P4" | "P5" | "P6";
+export type Coord = { x: number; y: number }; // y=0 net, y=9 endline
+
+export function isRotationLegal(pos: Record<PositionSlot, Coord>): string[] {
+  const errors: string[] = [];
+  if (pos.P4.y >= pos.P5.y) errors.push("Overlap: P4 (LF) must be in front of P5 (LB)");
+  if (pos.P3.y >= pos.P6.y) errors.push("Overlap: P3 (MF) must be in front of P6 (MB)");
+  if (pos.P2.y >= pos.P1.y) errors.push("Overlap: P2 (RF) must be in front of P1 (RB)");
+  return errors;
+}`
+    }
+  ]}
+/>
