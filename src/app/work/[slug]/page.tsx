@@ -70,7 +70,7 @@ export default async function Project({
     })) || [];
 
   return (
-    <section className="flex w-full max-w-3xl flex-col items-center gap-8 py-6">
+    <section className="flex w-full flex-col items-center gap-8 py-6">
       <Schema
         as="blogPosting"
         baseURL={baseURL}
@@ -89,14 +89,33 @@ export default async function Project({
         }}
       />
 
-      <header className="flex max-w-2xl flex-col items-center text-center gap-3">
-        <SmartLink href="/work" prefixIcon="chevronLeft">
+      <div className="flex w-full justify-start">
+        <SmartLink
+          href="/work"
+          prefixIcon="chevronLeft"
+          className="text-fg hover:text-fg/80"
+        >
           Projects
         </SmartLink>
-        {post.metadata.publishedAt && (
-          <time className="text-xs font-medium text-fg-muted">
-            {formatDate(post.metadata.publishedAt)}
-          </time>
+      </div>
+
+      <header className="flex max-w-2xl flex-col items-center text-center gap-3">
+        {(post.metadata.publishedAt || post.metadata.tag) && (
+          <div className="flex flex-wrap items-center justify-center gap-2.5">
+            {post.metadata.publishedAt && (
+              <time className="font-mono text-xs font-medium text-fg/80">
+                {formatDate(post.metadata.publishedAt)}
+              </time>
+            )}
+            {post.metadata.publishedAt && post.metadata.tag && (
+              <span className="text-border-strong">·</span>
+            )}
+            {post.metadata.tag && (
+              <span className="rounded-full border border-border bg-neutral-alpha-weak px-3 py-0.5 font-mono text-[11px] font-medium uppercase tracking-wider text-fg-subtle">
+                {post.metadata.tag}
+              </span>
+            )}
+          </div>
         )}
         <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-fg text-balance">
           {post.metadata.title}
@@ -106,11 +125,16 @@ export default async function Project({
       {post.metadata.team && post.metadata.team.length > 0 && (
         <div className="flex items-center justify-center gap-4">
           <AvatarGroup reverse avatars={avatars} size="s" />
-          <div className="text-sm font-medium text-fg-muted">
+          <div className="text-sm font-medium text-fg">
             {post.metadata.team.map((member, idx) => (
               <span key={idx}>
-                {idx > 0 && <span className="text-fg-subtle">, </span>}
-                <SmartLink href={member.linkedIn}>{member.name}</SmartLink>
+                {idx > 0 && <span className="text-fg/60">, </span>}
+                <SmartLink
+                  href={member.linkedIn}
+                  className="text-fg hover:text-fg/80"
+                >
+                  {member.name}
+                </SmartLink>
               </span>
             ))}
           </div>
@@ -118,23 +142,32 @@ export default async function Project({
       )}
 
       {post.metadata.images.length > 0 && (
-        <Media
-          priority
-          enlarge
-          aspectRatio="16 / 9"
-          alt={post.metadata.title}
-          src={post.metadata.images[0]}
-          className="w-full"
-        />
+        <div className="w-full max-w-6xl">
+          <Media
+            priority
+            enlarge
+            aspectRatio="16 / 9"
+            alt={post.metadata.title}
+            src={post.metadata.images[0]}
+            className="w-full"
+          />
+        </div>
       )}
 
       <article className="w-full max-w-2xl">
         <CustomMDX source={post.content} />
       </article>
 
-      <div className="mt-10 flex w-full flex-col items-center gap-8 border-t border-border pt-10">
-        <h2 className="font-heading text-2xl font-bold text-fg">Related Volleyball Projects</h2>
-        <Projects exclude={[post.slug]} range={[2]} />
+      <div className="mt-8 flex w-full max-w-2xl flex-col gap-4 border-t border-border pt-8">
+        <div className="flex items-center justify-between gap-4">
+          <h2 className="font-heading text-base font-semibold tracking-tight text-fg">
+            More Projects
+          </h2>
+          <SmartLink href="/work" suffixIcon="arrowRight" className="text-xs">
+            All projects
+          </SmartLink>
+        </div>
+        <Projects exclude={[post.slug]} range={[1, 2]} compact />
       </div>
 
       <ScrollToHash />

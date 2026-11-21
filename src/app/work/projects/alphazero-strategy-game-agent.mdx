@@ -1,0 +1,62 @@
+---
+title: "AlphaZero-Style Self-Play & Batched MCTS Game Engine"
+publishedAt: "2026-07-22"
+summary: "High-throughput C++ and PyTorch Monte Carlo Tree Search engine featuring batched GPU leaf evaluation, virtual loss parallelization, and automated Elo tournament gating."
+tag: "Games"
+images:
+  - "/images/projects/project-01/cover-03.jpg"
+  - "/images/projects/project-01/image-03.jpg"
+team:
+  - name: "Jeff Madro"
+    role: "Lead Systems & RL Engineer"
+    avatar: "/images/profile2.jpg"
+    linkedIn: "https://www.linkedin.com/in/jeff-mad/"
+link: "https://github.com/madjeffrey"
+---
+
+## Overview
+
+Modern game-playing agents achieve superhuman tactical depth by coupling a shared policy-value neural network with lookahead search. This project template implements a **distributed self-play MCTS architecture** engineered to maximize GPU inference utilization across asynchronous search threads while continuously validating candidate checkpoints through SPRT/Elo gating.
+
+## Key Engineering Decisions
+
+- **Batched Leaf Inference with Virtual Loss**: Decouples tree traversal workers from GPU forward passes by collecting leaf evaluation requests into dynamic micro-batches (`B = 64`), eliminating host-device synchronization stalls.
+- **PUCT Exploration & Dirichlet Root Noise**: Balances tactical exploitation with root exploration during self-play while switching to deterministic visit-count temperature schedules during tournament evaluation.
+- **Zero-Copy Replay Ring Buffer**: Streams self-play trajectories directly into pinned memory slabs for asynchronous SGD updates without blocking actor workers.
+
+## PUCT Node Selection
+
+<CodeBlock
+  highlight="7-12"
+  codes={[
+    {
+      language: "cpp",
+      label: "engine/mcts/puct.hpp",
+      code: `inline float puct_score(const Edge& edge, int parent_visits, float c_puct) {
+  const float q = edge.visits > 0 ? edge.value_sum / static_cast<float>(edge.visits) : 0.0f;
+  const float v_loss = static_cast<float>(edge.virtual_loss);
+  const float denom = 1.0f + static_cast<float>(edge.visits) + v_loss;
+  const float u = c_puct * edge.prior * std::sqrt(static_cast<float>(parent_visits)) / denom;
+  return (q - v_loss * 0.05f) + u;
+}`
+    }
+  ]}
+/>
+
+## Self-Play Progression
+
+<Table
+  data={{
+    headers: ["Checkpoint", "Self-Play Games", "Avg Search Throughput", "Estimated Elo"],
+    rows: [
+      ["Iter 050 (Random Init)", "25,000", "14,200 nodes/s", "1,180"],
+      ["Iter 200 (Early Tactics)", "100,000", "16,800 nodes/s", "1,740"],
+      ["Iter 500 (Converged Policy)", "250,000", "18,400 nodes/s", "2,290"]
+    ]
+  }}
+/>
+
+## Technologies
+
+- **Search Runtime**: C++20, pybind11, lock-free queues
+- **Training & Inference**: PyTorch, LibTorch, CUDA Streams

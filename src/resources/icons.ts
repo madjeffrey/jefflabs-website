@@ -10,6 +10,7 @@ import {
   HiOutlineEye,
   HiOutlineEyeSlash,
   HiOutlineDocument,
+  HiOutlineDocumentText,
   HiOutlineGlobeAsiaAustralia,
   HiOutlineRocketLaunch,
   HiOutlineSun,
@@ -26,6 +27,13 @@ import {
   HiOutlineTrophy,
   HiOutlineLockClosed,
   HiOutlineClipboard,
+  HiOutlineCpuChip,
+  HiOutlineBeaker,
+  HiOutlineCommandLine,
+  HiOutlineCube,
+  HiOutlineCodeBracket,
+  HiOutlineAcademicCap,
+  HiOutlineInformationCircle,
 } from "react-icons/hi2";
 
 import {
@@ -34,7 +42,11 @@ import {
   PiGridFourDuotone,
   PiBookBookmarkDuotone,
   PiImageDuotone,
-  PiVolleyballDuotone,
+  PiRobotDuotone,
+  PiGameControllerDuotone,
+  PiBrainDuotone,
+  PiGraphDuotone,
+  PiStackDuotone,
 } from "react-icons/pi";
 
 import {
@@ -47,6 +59,12 @@ import {
   SiOpencv,
   SiFigma,
   SiSupabase,
+  SiCplusplus,
+  SiRos,
+  SiNvidia,
+  SiDocker,
+  SiLinux,
+  SiRust,
 } from "react-icons/si";
 
 import {
@@ -62,7 +80,6 @@ import {
   FaWhatsapp,
   FaReddit,
   FaTelegram,
-  FaVolleyball,
 } from "react-icons/fa6";
 
 export const iconLibrary = {
@@ -82,8 +99,19 @@ export const iconLibrary = {
   chart: HiOutlineChartBar,
   video: HiOutlineVideoCamera,
   trophy: HiOutlineTrophy,
-  volleyball: PiVolleyballDuotone,
-  volleyballSolid: FaVolleyball,
+  cpu: HiOutlineCpuChip,
+  beaker: HiOutlineBeaker,
+  terminal: HiOutlineCommandLine,
+  cube: HiOutlineCube,
+  code: HiOutlineCodeBracket,
+  academic: HiOutlineAcademicCap,
+  info: HiOutlineInformationCircle,
+  article: HiOutlineDocumentText,
+  robot: PiRobotDuotone,
+  gamepad: PiGameControllerDuotone,
+  brain: PiBrainDuotone,
+  graph: PiGraphDuotone,
+  layers: PiStackDuotone,
   email: HiEnvelope,
   globe: HiOutlineGlobeAsiaAustralia,
   person: PiUserCircleDuotone,
@@ -113,6 +141,12 @@ export const iconLibrary = {
   opencv: SiOpencv,
   supabase: SiSupabase,
   figma: SiFigma,
+  cplusplus: SiCplusplus,
+  ros: SiRos,
+  nvidia: SiNvidia,
+  docker: SiDocker,
+  linux: SiLinux,
+  rust: SiRust,
   facebook: FaFacebook,
   pinterest: FaPinterest,
   whatsapp: FaWhatsapp,

@@ -1,5 +1,5 @@
 import React from "react";
-import { Meta, Schema, Newsletter, Icon } from "@/components";
+import { Meta, Schema, Newsletter } from "@/components";
 import { Posts } from "@/components/blog/Posts";
 import { baseURL, blog, person } from "@/resources";
 
@@ -30,26 +30,20 @@ export default function Blog() {
         }}
       />
 
-      <header className="flex flex-col gap-2">
-        {/* <span className="inline-flex w-fit items-center gap-1.5 rounded-full border border-border-brand bg-brand-soft px-3 py-1 text-xs font-semibold text-brand">
-          <Icon name="volleyball" size="xs" />
-          <span>Tactical Playbook & Engineering Blog</span>
-        </span> */}
+      <header className="flex flex-col items-start text-left gap-3 border-b border-border pb-6">
+        <span className="font-mono text-xs font-semibold uppercase tracking-wider text-brand">
+          Blog
+        </span>
         <h1 className="font-heading text-3xl sm:text-4xl font-extrabold tracking-tight text-fg">
           {blog.title}
         </h1>
-        {/* <p className="text-sm sm:text-base text-fg-muted">{blog.description}</p> */}
+        <p className="max-w-2xl text-sm sm:text-base text-fg-muted leading-relaxed">
+          {blog.description}
+        </p>
       </header>
 
-      <div className="flex flex-col gap-8">
-        <Posts range={[1, 1]} thumbnail />
-        <Posts range={[2, 3]} columns="2" thumbnail direction="column" />
-        <Newsletter />
-        <h2 className="font-heading text-2xl font-bold tracking-tight text-fg pt-2">
-          Earlier posts
-        </h2>
-        <Posts range={[4]} columns="2" direction="column" />
-      </div>
+      <Posts enableFilter />
+      <Newsletter />
     </div>
   );
 }

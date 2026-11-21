@@ -30,15 +30,17 @@ export default function Gallery() {
         }}
       />
 
-      <header className="flex flex-col items-center text-center gap-2">
-        <span className="inline-flex items-center gap-1.5 rounded-full border border-border-brand bg-brand-soft px-3 py-1 text-xs font-semibold text-brand">
+      <header className="flex flex-col items-start text-left gap-3 border-b border-border pb-6">
+        <span className="inline-flex items-center gap-1.5 font-mono text-xs font-semibold uppercase tracking-wider text-brand">
           <Icon name="gallery" size="xs" />
-          <span>Visual Moments</span>
+          <span>Visual Archive</span>
         </span>
         <h1 className="font-heading text-3xl sm:text-4xl font-extrabold tracking-tight text-fg">
           {gallery.title}
         </h1>
-        <p className="text-sm sm:text-base text-fg-muted">{gallery.description}</p>
+        <p className="max-w-2xl text-sm sm:text-base text-fg-muted leading-relaxed">
+          {gallery.description}
+        </p>
       </header>
 
       <GalleryView />

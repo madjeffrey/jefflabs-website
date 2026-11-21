@@ -4,15 +4,18 @@ import React from "react";
 
 export type IANATimeZone = Extract<keyof typeof zones, string>;
 
-export type VolleyballProfile = {
-  position: string;
-  playStyle: string;
-  favoriteSystem: string;
-  courtMetrics: Array<{
-    label: string;
-    value: string;
-    detail: string;
-  }>;
+export type ResearchPillar = {
+  title: string;
+  tag: string;
+  description: string;
+  topics: string[];
+  icon: IconName;
+};
+
+export type ResearchProfile = {
+  focus: string;
+  domains: string[];
+  coreStack: string[];
 };
 
 export type Person = {
@@ -25,7 +28,7 @@ export type Person = {
   location: IANATimeZone;
   languages?: string[];
   locale?: string;
-  volleyball?: VolleyballProfile;
+  research?: ResearchProfile;
 };
 
 export type Newsletter = {
@@ -58,12 +61,7 @@ export interface Home extends BasePageConfig {
     href: string;
   };
   subline: React.ReactNode;
-  highlights?: Array<{
-    title: string;
-    metric: string;
-    description: string;
-    icon: IconName;
-  }>;
+  researchPillars?: ResearchPillar[];
 }
 
 export interface About extends BasePageConfig {
@@ -104,6 +102,8 @@ export interface About extends BasePageConfig {
     title: string;
     institutions: Array<{
       name: string;
+      degree?: string;
+      timeframe?: string;
       description: React.ReactNode;
     }>;
   };
@@ -123,6 +123,16 @@ export interface About extends BasePageConfig {
         width: number;
         height: number;
       }>;
+    }>;
+  };
+  awards?: {
+    display: boolean;
+    title: string;
+    items: Array<{
+      title: string;
+      issuer?: string;
+      date?: string;
+      description?: React.ReactNode;
     }>;
   };
 }

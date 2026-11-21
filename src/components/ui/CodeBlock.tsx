@@ -94,7 +94,7 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({
               type="button"
               onClick={handleCopy}
               aria-label="Copy code"
-              className="inline-flex items-center gap-1.5 rounded-md border border-white/10 bg-white/5 px-2.5 py-1 text-xs text-neutral-300 hover:border-brand/50 hover:text-white transition-colors"
+              className="inline-flex items-center gap-1.5 rounded-md border border-white/10 bg-white/5 px-2.5 py-1 text-xs text-neutral-300 hover:bg-white/10 hover:border-white/20 hover:text-white transition-colors"
             >
               <Icon name={copied ? "check" : "copy"} size="xs" className="text-brand" />
               <span>{copied ? "Copied" : "Copy"}</span>

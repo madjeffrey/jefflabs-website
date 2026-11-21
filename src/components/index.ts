@@ -8,5 +8,5 @@ export { Providers, useTheme, useToast } from "@/components/Providers";
 export { ScrollToHash } from "@/components/ScrollToHash";
 export { ThemeToggle } from "@/components/ThemeToggle";
 export { CustomMDX } from "@/components/mdx";
-export { CourtTelemetry } from "@/components/CourtTelemetry";
+export { ResearchPillars } from "@/components/ResearchPillars";
 export * from "@/components/ui";

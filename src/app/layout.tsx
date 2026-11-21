@@ -81,7 +81,7 @@ export default async function RootLayout({
           <BackgroundEffects effects={effects} />
           <Header />
           <main className="relative z-10 flex w-full flex-1 justify-center px-4 py-8 sm:px-6 md:px-8">
-            <div className="flex w-full max-w-5xl justify-center">
+            <div className="flex w-full justify-center">
               <RouteGuard>{children}</RouteGuard>
             </div>
           </main>

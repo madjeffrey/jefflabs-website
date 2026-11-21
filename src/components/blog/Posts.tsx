@@ -1,6 +1,6 @@
 import React from "react";
 import { getPosts } from "@/utils/utils";
-import Post from "./Post";
+import { PostsGrid, type BlogPostItem } from "./PostsGrid";
 
 interface PostsProps {
   range?: [number] | [number, number];
@@ -8,6 +8,8 @@ interface PostsProps {
   thumbnail?: boolean;
   direction?: "row" | "column";
   exclude?: string[];
+  enableFilter?: boolean;
+  compact?: boolean;
 }
 
 export function Posts({
@@ -16,6 +18,8 @@ export function Posts({
   thumbnail = false,
   exclude = [],
   direction,
+  enableFilter = false,
+  compact = false,
 }: PostsProps) {
   let allBlogs = getPosts(["src", "app", "blog", "posts"]);
 
@@ -31,25 +35,27 @@ export function Posts({
     ? sortedBlogs.slice(range[0] - 1, range.length === 2 ? range[1] : sortedBlogs.length)
     : sortedBlogs;
 
-  const gridCols =
-    columns === "3"
-      ? "grid-cols-1 md:grid-cols-3"
-      : columns === "2"
-        ? "grid-cols-1 md:grid-cols-2"
-        : "grid-cols-1";
-
   if (displayedBlogs.length === 0) return null;
 
+  const items: BlogPostItem[] = displayedBlogs.map((post) => ({
+    slug: post.slug,
+    metadata: {
+      title: post.metadata.title,
+      summary: post.metadata.summary,
+      publishedAt: post.metadata.publishedAt,
+      image: post.metadata.image,
+      tag: post.metadata.tag,
+    },
+  }));
+
   return (
-    <div className={`grid w-full gap-5 ${gridCols}`}>
-      {displayedBlogs.map((post) => (
-        <Post
-          key={post.slug}
-          post={{ slug: post.slug, metadata: post.metadata }}
-          thumbnail={thumbnail}
-          direction={direction}
-        />
-      ))}
-    </div>
+    <PostsGrid
+      posts={items}
+      columns={columns}
+      thumbnail={thumbnail}
+      direction={direction}
+      enableFilter={enableFilter}
+      compact={compact}
+    />
   );
 }

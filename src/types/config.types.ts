@@ -7,7 +7,7 @@ export type DisplayConfig = {
   location: boolean;
   time: boolean;
   themeSwitcher: boolean;
-  courtTelemetry?: boolean;
+  researchFocus?: boolean;
 };
 
 export type RoutesConfig = Record<`/${string}`, boolean>;

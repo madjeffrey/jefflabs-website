@@ -1,0 +1,72 @@
+---
+title: "Sim-to-Real Quadruped Locomotion via Asymmetric Actor-Critic"
+publishedAt: "2026-09-15"
+summary: "End-to-end reinforcement learning pipeline for blind and proprioceptive quadruped locomotion across unstructured terrain using privileged teacher-student distillation and domain randomization."
+tag: "Robotics"
+images:
+  - "/images/projects/project-01/cover-01.jpg"
+  - "/images/projects/project-01/cover-02.jpg"
+team:
+  - name: "Jeff Madro"
+    role: "Senior RL Engineer"
+    avatar: "/images/profile2.jpg"
+    linkedIn: "https://www.linkedin.com/in/jeff-mad/"
+link: "https://github.com/madjeffrey"
+---
+
+## Overview
+
+Deploying learned locomotion policies onto physical quadruped hardware requires handling unmodeled actuator compliance, IMU drift, communication latency, and variable ground friction. This template showcases an **asymmetric actor-critic PPO** pipeline trained across 4,096 parallel GPU physics environments with curriculum terrain generation and zero-shot sim-to-real transfer.
+
+## System Architecture
+
+- **Privileged Critic & Proprioceptive Actor**: During simulation training, the value critic consumes exact contact forces, local terrain height scans, and link friction coefficients, while the deployed actor relies strictly on onboard joint encoders, IMU angular velocity, and action history.
+- **Actuator Network & Latency Modeling**: Models series-elastic torque lag and 20 ms control-loop jitter directly inside vectorized rollouts.
+- **Adaptive Terrain Curriculum**: Automatically promotes policies from flat planes to slopes, stairs, and randomized rubble grids once linear velocity tracking error drops below threshold.
+
+## Policy Architecture & Rollout Buffer
+
+<CodeBlock
+  highlight="10-16"
+  codes={[
+    {
+      language: "python",
+      label: "rl/models/asymmetric_ac.py",
+      code: `import torch
+import torch.nn as nn
+
+class AsymmetricActorCritic(nn.Module):
+    def __init__(self, obs_dim: int, priv_dim: int, act_dim: int):
+        super().__init__()
+        self.actor = nn.Sequential(
+            nn.Linear(obs_dim, 256), nn.ELU(),
+            nn.Linear(256, 128), nn.ELU(),
+            nn.Linear(128, act_dim),
+        )
+        self.critic = nn.Sequential(
+            nn.Linear(obs_dim + priv_dim, 512), nn.ELU(),
+            nn.Linear(512, 256), nn.ELU(),
+            nn.Linear(256, 1),
+        )
+        self.log_std = nn.Parameter(torch.zeros(act_dim))`
+    }
+  ]}
+/>
+
+## Ablation Benchmarks
+
+<Table
+  data={{
+    headers: ["Variant", "Velocity Tracking Error (m/s)", "Terrain Success Rate", "Mean Torque Smoothness"],
+    rows: [
+      ["Baseline Symmetric PPO", "0.24", "71.5%", "0.68"],
+      ["+ Domain Randomization", "0.17", "86.2%", "0.79"],
+      ["+ Asymmetric Critic + Curriculum", "0.09", "95.8%", "0.91"]
+    ]
+  }}
+/>
+
+## Technologies
+
+- **Simulation & RL**: Isaac Lab, MuJoCo, PyTorch, CUDA
+- **Runtime & Control**: C++, ROS 2, TensorRT, Linux PREEMPT_RT

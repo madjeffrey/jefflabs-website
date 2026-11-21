@@ -1,48 +1,30 @@
 import React from "react";
 import { About, Blog, Gallery, Home, Newsletter, Person, Social, Work } from "@/types";
-import { InlineCode } from "@/components/ui/CodeBlock";
 
 const person: Person = {
   firstName: "Jeff",
   lastName: "Madro",
   name: "Jeff Madro",
-  role: "AI Engineer & Volleyball Systems Builder",
+  role: "Senior AI & Reinforcement Learning Engineer",
   avatar: "/images/profile2.jpg",
   email: "jeffmadro@gmail.com",
   location: "Canada/Mountain",
-  languages: ["English", "Bahasa"],
+  languages: ["English", "French"],
   locale: "en",
-  volleyball: {
-    position: "Setter / Opposite Hitter (RS)",
-    playStyle: "Fast-Tempo Side-Out & Computer Vision Rally Analytics",
-    favoriteSystem: "5-1 High-Tempo Offense",
-    courtMetrics: [
-      {
-        label: "Rally Tracking FPS",
-        value: "120 FPS",
-        detail: "Real-time ball & player pose inference",
-      },
-      {
-        label: "Offense System",
-        value: "5-1 Tempo",
-        detail: "1st-tempo quick & pipe distribution",
-      },
-      {
-        label: "Core Stack",
-        value: "Next.js + AI",
-        detail: "TypeScript, Tailwind CSS, PyTorch",
-      },
-    ],
+  research: {
+    focus: "Reinforcement Learning & Autonomous Decision Systems",
+    domains: ["Reinforcement Learning", "Robotics & Control", "Games & Multi-Agent AI"],
+    coreStack: ["PyTorch", "JAX", "C++", "MuJoCo", "Isaac Lab", "ROS 2", "CUDA", "TypeScript"],
   },
 };
 
 const newsletter: Newsletter = {
   display: true,
-  title: <>Subscribe to {person.firstName}'s Court & Code Dispatch</>,
+  title: <>Subscribe to new posts</>,
   description: (
     <>
-      Weekly breakdowns on AI engineering, volleyball biomechanics, computer vision rally
-      analytics, and modern web architecture.
+      Occasional essays and reflections on AI, philosophy, and lessons learned — straight to your
+      inbox.
     </>
   ),
 };
@@ -57,7 +39,7 @@ const social: Social = [
   {
     name: "LinkedIn",
     icon: "linkedin",
-    link: "https://www.linkedin.com/in/jeff-mad/?isSelfProfile=true",
+    link: "https://www.linkedin.com/in/jeff-mad/",
     essential: true,
   },
   {
@@ -72,45 +54,53 @@ const home: Home = {
   path: "/",
   image: "/images/og/home.jpg",
   label: "Home",
-  title: "Jeff's Lab – AI Engineering & Volleyball Analytics",
-  description: `Portfolio website showcasing ${person.name}'s work in AI engineering, volleyball analytics, and modern web systems.`,
-  headline: <>Engineering intelligence from the terminal to the volleyball court</>,
+  title: "Jeff's Lab",
+  description: `Portfolio and blog of ${person.name}, Senior AI Engineer specializing in reinforcement learning, robotics control, and game AI systems.`,
+  headline: <>Reinforcement learning for robotics and games</>,
   featured: {
     display: true,
     title: (
-      <span className="inline-flex items-center gap-2.5">
-        <strong className="text-brand">CourtVision AI</strong>
+      <span className="inline-flex items-center gap-3">
+        <span className="font-medium text-fg">Sim-to-Real RL</span>
         <span className="h-3.5 w-px bg-border-brand" />
-        <span className="text-fg-muted">Real-time rally & spike telemetry</span>
+        <span className="text-brand">Featured work</span>
       </span>
     ),
-    href: "/work/courtvision-ai-volleyball-rally-analytics",
+    href: "/work",
   },
   subline: (
     <>
-      I'm {person.firstName}, an AI engineer based in Alberta building intelligent web products,{" "}
-      <InlineCode>computer vision</InlineCode> pipelines, and tactical volleyball analytics tools.
-      When I'm not shipping production code, I'm running a fast-tempo 5-1 offense on the court.
+      I&apos;m {person.firstName}, a senior AI engineer researching{" "}
+      <strong className="font-semibold text-fg">reinforcement learning</strong>,{" "}
+      <strong className="font-semibold text-fg">robotics</strong>, and{" "}
+      <strong className="font-semibold text-fg">games</strong> — building scalable
+      control and decision systems.
     </>
   ),
-  highlights: [
+  researchPillars: [
     {
-      title: "Vision & Telemetry",
-      metric: "120 FPS",
-      description: "Automated serve velocity, 3D trajectory, and block-jump tracking from match video.",
-      icon: "video",
+      title: "Reinforcement Learning",
+      tag: "CORE RESEARCH",
+      icon: "brain",
+      description:
+        "Policy optimization, sample-efficient world models, reward design, and high-throughput distributed training.",
+      topics: ["PPO / SAC", "World Models", "Offline RL"],
     },
     {
-      title: "Tactical Systems",
-      metric: "5-1 Engine",
-      description: "Interactive rotation visualizers, pass-rating EPV models, and live tournament brackets.",
-      icon: "volleyball",
+      title: "Robotics & Control",
+      tag: "SIM-TO-REAL",
+      icon: "robot",
+      description:
+        "Whole-body legged locomotion, contact-rich manipulation, GPU physics simulation, and zero-shot hardware transfer.",
+      topics: ["MuJoCo", "Isaac Lab", "Domain Randomization"],
     },
     {
-      title: "Full-Stack AI",
-      metric: "TypeScript + ML",
-      description: "Modular Next.js, Tailwind CSS, and PyTorch architectures engineered for speed.",
-      icon: "bolt",
+      title: "Games & Decision AI",
+      tag: "MULTI-AGENT",
+      icon: "gamepad",
+      description:
+        "Self-play training, batched MCTS planning, opponent modeling, and adaptive agents in imperfect-information games.",
+      topics: ["MCTS / AlphaZero", "Self-Play", "MARL"],
     },
   ],
 };
@@ -119,16 +109,17 @@ const about: About = {
   path: "/about",
   label: "About",
   title: `About – ${person.name}`,
-  description: `Meet ${person.name}, ${person.role} based in ${person.location}`,
+  description: `Meet ${person.name}, ${person.role} focused on reinforcement learning, robotics, and games.`,
   tableOfContent: {
     display: true,
-    subItems: true,
+    subItems: false,
   },
   avatar: {
     display: true,
   },
+  // Enable after adding a personal scheduling URL
   calendar: {
-    display: true,
+    display: false,
     link: "https://cal.com",
   },
   intro: {
@@ -137,60 +128,53 @@ const about: About = {
     description: (
       <>
         <p>
-          {person.firstName} is a Mountain-time-based AI engineer and competitive volleyball player
-          who loves turning complex data and fast-moving physical systems into intuitive digital
-          products. Whether architecting low-latency LLM workflows or analyzing six-rotation
-          side-out efficiency, his work focuses on precision, modularity, and human-centered
-          performance.
+          {person.firstName} is a senior AI and reinforcement learning engineer focused on building
+          autonomous decision-making systems that operate reliably under physical and strategic
+          uncertainty. His work spans policy optimization, learned world models, and scalable
+          distributed simulation for continuous control and multi-agent environments.
         </p>
         <p>
-          Outside of software engineering, {person.firstName} competes in indoor and beach
-          volleyball leagues, building open-source court telemetry tools that help coaches and
-          athletes visualize setter distribution, serve receive seams, and vertical jump mechanics.
+          Across robotics and games, he builds end-to-end training and evaluation infrastructure —
+          from vectorized GPU physics rollouts and sim-to-real system identification to batched
+          Monte Carlo Tree Search engines and reproducible experiment benchmarks.
         </p>
       </>
     ),
   },
   work: {
     display: true,
-    title: "Work & Court Experience",
+    title: "Work Experience",
     experiences: [
       {
-        company: "JeffLabs AI & Sports Telemetry",
+        company: "Jeff's Lab — Independent RL Research & Systems",
         timeframe: "2023 - Present",
-        role: "Founder & Lead AI Engineer",
+        role: "Senior AI & Reinforcement Learning Engineer",
         achievements: [
           <>
-            Engineered <strong>CourtVision AI</strong>, a computer vision rally analysis pipeline
-            that extracts serve velocity, attack angles, and defensive digging heatmaps from single
-            baseline camera feeds.
+            Designed GPU-accelerated reinforcement learning pipelines and asymmetric actor-critic
+            policies for legged locomotion and contact-rich manipulation tasks with zero-shot
+            sim-to-real transfer.
           </>,
           <>
-            Architected modular Next.js, TypeScript, and Tailwind CSS web applications for club
-            tournament scheduling, 5-1 rotation training, and live match stat tracking.
+            Engineered distributed self-play and batched tree-search evaluation harnesses in
+            Python, JAX, and C++ to benchmark policy robustness against adaptive agents.
           </>,
         ],
-        images: [
-          {
-            src: "/images/projects/project-01/cover-01.jpg",
-            alt: "CourtVision AI Rally Analytics Dashboard",
-            width: 16,
-            height: 9,
-          },
-        ],
+        images: [],
       },
       {
-        company: "Apex Volley Tech Collective",
+        company: "Autonomous Systems & ML Engineering",
         timeframe: "2020 - 2023",
-        role: "Full-Stack & Machine Learning Engineer",
+        role: "Machine Learning Systems Engineer",
         achievements: [
           <>
-            Built an expected side-out value (EPV) statistical model correlating 0–3 serve-receive
-            pass ratings with first-ball kill percentages across 1,200+ competitive sets.
+            Built low-latency perception, state estimation, and real-time inference services
+            integrating PyTorch models with C++ runtime pipelines and ROS 2 control loops.
           </>,
           <>
-            Led front-end architecture migration to a modular TypeScript + Tailwind CSS component
-            system, cutting bundle size by 38% and improving live scoreboard latency.
+            Architected reproducible experiment tracking, automated regression suites, and
+            full-stack visualization interfaces for inspecting policy rollouts and reward
+            diagnostics.
           </>,
         ],
         images: [],
@@ -199,23 +183,23 @@ const about: About = {
   },
   studies: {
     display: true,
-    title: "Studies & Certifications",
+    title: "Education",
     institutions: [
       {
-        name: "Software Engineering & Machine Learning",
+        name: "Machine Learning & Reinforcement Learning",
         description: (
           <>
-            Focused on computer vision, deep learning architectures, distributed systems, and
-            full-stack web engineering.
+            Policy gradient methods, off-policy actor-critic architectures, model-based planning,
+            and multi-agent self-play dynamics.
           </>
         ),
       },
       {
-        name: "Volleyball Coaching & Biomechanics Analytics",
+        name: "Robotics, Control & Simulation Systems",
         description: (
           <>
-            Applied study in 5-1/6-2 offensive systems, approach jump kinematics, and data-driven
-            match scouting.
+            Rigid-body physics simulation, state estimation, domain randomization, and real-time
+            embedded inference for hardware deployment.
           </>
         ),
       },
@@ -226,55 +210,79 @@ const about: About = {
     title: "Technical Skills",
     skills: [
       {
-        title: "AI & Computer Vision Telemetry",
+        title: "Reinforcement Learning & Deep Learning",
         description: (
           <>
-            Designing real-time object detection, ball trajectory tracking, and pose estimation
-            pipelines for high-speed volleyball rally video analysis.
+            Implementing vectorized training loops, custom policy/value architectures, latent world
+            models, and GPU-accelerated tree search pipelines.
           </>
         ),
         tags: [
           { name: "Python", icon: "python" },
           { name: "PyTorch", icon: "pytorch" },
-          { name: "OpenCV", icon: "opencv" },
+          { name: "CUDA / NVIDIA", icon: "nvidia" },
         ],
-        images: [
-          {
-            src: "/images/projects/project-01/cover-02.jpg",
-            alt: "Volleyball trajectory and court zone heatmaps",
-            width: 16,
-            height: 9,
-          },
-          {
-            src: "/images/projects/project-01/cover-03.jpg",
-            alt: "Pose estimation and jump telemetry visualization",
-            width: 16,
-            height: 9,
-          },
-        ],
+        images: [],
       },
       {
-        title: "Modern Web Architecture (Next.js, TypeScript & Tailwind)",
+        title: "Robotics Simulation & Control",
         description: (
           <>
-            Building modular, accessible, and fast web applications with Next.js App Router, strict
-            TypeScript, Tailwind CSS, and real-time Supabase backends.
+            Developing high-frequency control loops, physics environments, visual state estimation,
+            and sim-to-real deployment pipelines.
+          </>
+        ),
+        tags: [
+          { name: "C++", icon: "cplusplus" },
+          { name: "ROS 2", icon: "ros" },
+          { name: "OpenCV", icon: "opencv" },
+          { name: "Linux", icon: "linux" },
+        ],
+        images: [],
+      },
+      {
+        title: "Systems, Tooling & Web",
+        description: (
+          <>
+            Building reproducible containerized workloads, high-throughput telemetry backends, and
+            clean interactive research dashboards.
           </>
         ),
         tags: [
           { name: "TypeScript", icon: "typescript" },
           { name: "Next.js", icon: "nextjs" },
-          { name: "Tailwind CSS", icon: "tailwind" },
-          { name: "Supabase", icon: "supabase" },
+          { name: "Docker", icon: "docker" },
+          { name: "Rust", icon: "rust" },
         ],
-        images: [
-          {
-            src: "/images/projects/project-01/cover-04.jpg",
-            alt: "SpikeFlow live tournament and rotation interface",
-            width: 16,
-            height: 9,
-          },
-        ],
+        images: [],
+      },
+    ],
+  },
+  awards: {
+    display: true,
+    title: "Awards",
+    items: [
+      {
+        title: "Best Paper / Outstanding Project Recognition",
+        issuer: "Reinforcement Learning & Robotics Symposium",
+        date: "2024",
+        description: (
+          <>
+            Recognized for sim-to-real locomotion transfer and high-throughput GPU physics
+            benchmarking.
+          </>
+        ),
+      },
+      {
+        title: "Dean's Honor List / Academic Distinction",
+        issuer: "Faculty of Engineering & Computer Science",
+        date: "2022",
+        description: (
+          <>
+            Awarded for top academic standing in machine learning, control systems, and software
+            engineering coursework.
+          </>
+        ),
       },
     ],
   },
@@ -283,70 +291,72 @@ const about: About = {
 const blog: Blog = {
   path: "/blog",
   label: "Blog",
-  title: "Volleyball Analytics, Court Tactics & AI Engineering",
-  description: `Articles and technical breakdowns by ${person.name} on volleyball strategy, sports biomechanics, and software engineering.`,
+  title: "Thoughts & Notes",
+  description:
+    "Things I am thinking about — essays, reflections, and notes on AI, philosophy, and lessons learned along the way.",
 };
 
 const work: Work = {
   path: "/work",
   label: "Projects",
-  title: `Volleyball & AI Projects – ${person.name}`,
-  description: `Volleyball analytics platforms, computer vision pipelines, and web applications built by ${person.name}.`,
+  title: "Projects & Systems",
+  description:
+    "Selected reinforcement learning research, robotics control architectures, and game-playing agent systems.",
 };
 
 const gallery: Gallery = {
   path: "/gallery",
-  label: "Court Gallery",
-  title: `Court & Lab Gallery – ${person.name}`,
-  description: `Snapshots from tournaments, training sessions, and engineering builds by ${person.name}.`,
+  label: "Gallery",
+  title: "Lab & Visual Archive",
+  description: `Selected simulation renders, hardware experiments, and visual system benchmarks by ${person.name}.`,
   images: [
     {
       src: "/images/gallery/horizontal-1.jpg",
-      alt: "Championship point rally under arena lights",
+      alt: "Quadruped locomotion policy rollout across uneven terrain",
       orientation: "horizontal",
-      caption: "Championship Finals — High-tempo pipe attack from Zone 6",
+      caption: "Sim-to-Real Locomotion — Rough-terrain traversal benchmark",
     },
     {
       src: "/images/gallery/vertical-4.jpg",
-      alt: "Double block timing at the net",
+      alt: "Dexterous robotic gripper contact sequence",
       orientation: "vertical",
-      caption: "Closing the seam on a quick middle attack",
+      caption: "Contact-Rich Manipulation — Tactile grasp stabilization",
     },
     {
       src: "/images/gallery/horizontal-3.jpg",
-      alt: "CourtVision AI camera calibration setup",
+      alt: "Distributed rollout cluster and telemetry monitor",
       orientation: "horizontal",
-      caption: "Baseline 120fps camera rig for serve trajectory tracking",
+      caption: "Vectorized Physics — Multi-GPU environment throughput bench",
     },
     {
       src: "/images/gallery/vertical-1.jpg",
-      alt: "Jump serve toss mechanics",
+      alt: "Actuator torque response calibration rig",
       orientation: "vertical",
-      caption: "Topspin jump serve approach from Zone 1",
+      caption: "System Identification — Motor delay and friction sweep",
     },
     {
       src: "/images/gallery/vertical-2.jpg",
-      alt: "Setter hands and quick release training",
+      alt: "Vision-based pose estimation camera mount",
       orientation: "vertical",
-      caption: "Neutral setter posture for deceptive 1st-tempo distribution",
+      caption: "Perception Pipeline — High-frequency state estimation setup",
     },
     {
       src: "/images/gallery/horizontal-2.jpg",
-      alt: "Beach 2v2 tournament sunset match",
+      alt: "Multi-agent strategy evaluation arena",
       orientation: "horizontal",
-      caption: "Summer 2v2 sand series — reading wind drift on float serves",
+      caption: "Self-Play Evaluation — Batched MCTS policy tournament",
     },
     {
       src: "/images/gallery/horizontal-4.jpg",
-      alt: "Post-match telemetry review with the squad",
+      alt: "Reward shaping and policy convergence review",
       orientation: "horizontal",
-      caption: "Reviewing side-out efficiency and pass ratings between sets",
+      caption: "Experiment Diagnostics — Comparing value-head calibration",
     },
     {
       src: "/images/gallery/vertical-3.jpg",
-      alt: "Libero split-step defensive stance",
+      alt: "Embedded edge inference hardware module",
       orientation: "vertical",
-      caption: "Perimeter defensive read in Zone 5",
+      caption: "Edge Deployment — Real-time TensorRT policy runtime",
     },
   ],
 };

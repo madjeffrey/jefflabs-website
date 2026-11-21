@@ -62,7 +62,7 @@ export const HeadingNav: React.FC<{ className?: string }> = ({ className = "" })
                 setActiveId(h.id);
               }
             }}
-            className={`transition-all duration-200 line-clamp-2 ${
+            className={`rounded-md px-2 py-1 transition-all duration-200 line-clamp-2 hover:bg-neutral-alpha-weak ${
               h.level === 3 ? "pl-3" : ""
             } ${
               isActive

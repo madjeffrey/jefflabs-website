@@ -1,0 +1,47 @@
+---
+title: "Latent World Models for Contact-Rich Robotic Manipulation"
+publishedAt: "2026-05-10"
+summary: "Model-based reinforcement learning framework combining RSSM latent dynamics with MPPI trajectory optimization for sample-efficient object manipulation in MuJoCo."
+tag: "RL Research"
+images:
+  - "/images/projects/project-01/cover-04.jpg"
+  - "/images/projects/project-01/video-01.mp4"
+team:
+  - name: "Jeff Madro"
+    role: "Research Engineer"
+    avatar: "/images/profile2.jpg"
+    linkedIn: "https://www.linkedin.com/in/jeff-mad/"
+link: "https://github.com/madjeffrey"
+---
+
+## Overview
+
+Model-free RL often requires tens of millions of environment steps to solve contact-rich manipulation tasks with sparse feedback. This research template pairs a **Recurrent State-Space Model (RSSM)** with short-horizon **Model Predictive Path Integral (MPPI)** planning in latent space to achieve rapid sample efficiency and smooth torque trajectories.
+
+## Key Capabilities
+
+- **Joint Latent Dynamics & Value Learning**: Learns compact stochastic-deterministic state transitions directly from proprioception and multi-view visual embeddings.
+- **Lookahead MPPI Trajectory Optimization**: Evaluates 512 candidate action sequences over a 12-step horizon in latent space, blending terminal value estimates with learned reward predictions.
+- **Hybrid Policy Prior**: Warm-starts MPPI sampling distributions with an amortized actor network to reduce planning variance on multi-stage pick-and-insert tasks.
+
+## Latent Rollout Planner
+
+<CodeBlock
+  codes={[
+    {
+      language: "python",
+      label: "wm/planner/mppi.py",
+      code: `def mppi_step(model, z0, mean, std, horizon=12, samples=512, temp=0.5):
+    actions = mean[:, None] + std[:, None] * torch.randn(horizon, samples, mean.shape[-1], device=z0.device)
+    returns = model.rollout_value(z0, actions.clamp(-1.0, 1.0))
+    weights = torch.softmax(temp * (returns - returns.max()), dim=0)
+    next_mean = (weights[:, None] * actions).sum(dim=1)
+    return next_mean[0], next_mean`
+    }
+  ]}
+/>
+
+## Technologies
+
+- **Physics & Benchmarks**: MuJoCo, Gymnasium, JAX / Flax, PyTorch
+- **Diagnostics**: TensorBoard, Weights & Biases, interactive rollout replay

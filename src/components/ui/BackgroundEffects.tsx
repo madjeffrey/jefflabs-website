@@ -41,7 +41,9 @@ export const BackgroundEffects: React.FC<BackgroundEffectsProps> = ({
         <div
           style={{
             opacity: effects.gradient.opacity / 100,
-            background: `radial-gradient(circle at ${maskX}% ${maskY}%, var(--brand-glow), transparent 65%)`,
+            background: contained
+              ? `radial-gradient(circle at ${maskX}% ${maskY}%, var(--brand-glow), transparent 65%)`
+              : `radial-gradient(ellipse 85% 65% at ${maskX}% ${maskY}%, var(--brand-glow) 0%, var(--brand-glow-mid) 45%, transparent 78%)`,
           }}
           className="absolute inset-0 transition-opacity duration-500"
         />

@@ -20,7 +20,9 @@ export const SmartLink: React.FC<SmartLinkProps> = ({
   children,
   ...props
 }) => {
-  const classes = `group inline-flex items-center gap-1.5 font-medium text-brand hover:text-brand-strong underline-offset-4 hover:underline transition-colors ${className}`.trim();
+  const hasCustomColor = /\btext-/.test(className);
+  const colorClasses = hasCustomColor ? "" : "text-brand hover:text-brand-strong";
+  const classes = `group inline-flex items-center gap-1.5 font-medium ${colorClasses} underline-offset-4 hover:underline transition-colors ${className}`.trim();
   const content = (
     <>
       {prefixIcon && <Icon name={prefixIcon} size="xs" />}
@@ -73,7 +75,7 @@ export const Accordion: React.FC<AccordionProps> = ({
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="flex w-full items-center justify-between px-4 py-3.5 text-left text-sm font-semibold text-fg hover:bg-brand-soft/40 transition-colors"
+        className="flex w-full items-center justify-between px-4 py-3.5 text-left text-sm font-semibold text-fg hover:bg-neutral-alpha-weak transition-colors"
       >
         <span>{title}</span>
         <Icon
@@ -83,7 +85,7 @@ export const Accordion: React.FC<AccordionProps> = ({
         />
       </button>
       {open && (
-        <div className="border-t border-border px-4 py-3.5 text-sm leading-relaxed text-fg-muted">
+        <div className="border-t border-border px-4 py-3.5 text-sm leading-relaxed text-fg">
           {children}
         </div>
       )}
@@ -119,9 +121,9 @@ export const Table: React.FC<TableProps> = ({ data, children }) => {
           </thead>
           <tbody className="divide-y divide-border">
             {data.rows.map((row, rIdx) => (
-              <tr key={rIdx} className="hover:bg-surface-elevated/60 transition-colors">
+              <tr key={rIdx} className="hover:bg-neutral-alpha-weak transition-colors">
                 {row.map((cell, cIdx) => (
-                  <td key={cIdx} className="px-4 py-3 text-fg-muted">
+                  <td key={cIdx} className="px-4 py-3 text-fg">
                     {cell}
                   </td>
                 ))}
@@ -152,15 +154,17 @@ export interface FeedbackProps {
 export const Feedback: React.FC<FeedbackProps> = ({
   title,
   description,
+  variant = "info",
   showIcon = true,
   children,
 }) => {
+  const iconName = variant === "success" ? "check" : variant === "warning" ? "bolt" : "info";
   return (
     <div className="my-4 flex items-start gap-3 rounded-2xl border border-border-brand bg-brand-soft/60 p-4 text-sm text-fg">
-      {showIcon && <Icon name="volleyball" size="m" className="mt-0.5 text-brand shrink-0" />}
+      {showIcon && <Icon name={iconName} size="m" className="mt-0.5 text-brand shrink-0" />}
       <div className="flex flex-col gap-1">
         {title && <div className="font-semibold text-fg">{title}</div>}
-        {description && <div className="text-fg-muted leading-relaxed">{description}</div>}
+        {description && <div className="text-fg leading-relaxed">{description}</div>}
         {children}
       </div>
     </div>

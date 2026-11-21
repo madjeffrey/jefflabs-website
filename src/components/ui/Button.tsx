@@ -19,13 +19,13 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 
 const variantClasses: Record<NonNullable<ButtonProps["variant"]>, string> = {
   primary:
-    "bg-brand text-neutral-950 font-semibold border border-brand hover:bg-brand-strong shadow-brand-glow",
+    "bg-brand text-neutral-950 font-semibold border border-transparent hover:bg-brand-strong",
   secondary:
-    "bg-surface-glass text-fg border border-border-strong hover:border-brand/60 hover:bg-brand-soft backdrop-blur-md",
+    "bg-transparent text-fg border border-border-strong hover:bg-neutral-alpha-weak",
   outline:
-    "bg-transparent text-fg border border-border-strong hover:border-brand hover:text-brand",
+    "bg-transparent text-fg border border-border-strong hover:bg-neutral-alpha-weak",
   ghost:
-    "bg-transparent text-fg-muted hover:text-fg hover:bg-surface-glass border border-transparent",
+    "bg-transparent text-fg-muted hover:text-fg hover:bg-neutral-alpha-weak border border-transparent",
 };
 
 const sizeClasses: Record<NonNullable<ButtonProps["size"]>, string> = {
@@ -200,10 +200,11 @@ export const ToggleButton: React.FC<ToggleButtonProps> = ({
   className = "",
   ...props
 }) => {
-  const classes = `inline-flex items-center gap-2 rounded-xl px-3 py-1.5 text-sm font-medium transition-all duration-200 ${
+  const sizingClasses = label ? "px-3 py-1" : "h-8 w-8 justify-center p-0";
+  const classes = `inline-flex items-center gap-2 rounded-full text-sm font-medium transition-all duration-200 ${sizingClasses} ${
     selected
-      ? "bg-brand-soft text-brand border border-border-brand shadow-sm"
-      : "text-fg-muted hover:text-fg hover:bg-surface border border-transparent"
+      ? "bg-[var(--nav-active-bg)] text-fg border border-transparent"
+      : "text-fg-muted hover:text-fg hover:bg-neutral-alpha-weak border border-transparent"
   } ${className}`.trim();
 
   const content = (
@@ -212,7 +213,7 @@ export const ToggleButton: React.FC<ToggleButtonProps> = ({
         <Icon
           name={prefixIcon}
           size="s"
-          className={selected ? "text-brand" : "text-current"}
+          className="text-current"
         />
       )}
       {label && <span>{label}</span>}

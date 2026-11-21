@@ -20,18 +20,18 @@ const routes: RoutesConfig = {
   "/about": true,
   "/work": true,
   "/blog": true,
-  "/gallery": true,
+  "/gallery": false,
 };
 
 const display: DisplayConfig = {
   location: true,
   time: true,
   themeSwitcher: true,
-  courtTelemetry: true,
+  researchFocus: true,
 };
 
 const protectedRoutes: ProtectedRoutesConfig = {
-  "/work/pro-scouting-playbook-pipeline": true,
+  "/work/internal-benchmarks": true,
 };
 
 const heading = Geist({
@@ -69,37 +69,37 @@ const style: StyleConfig = {
   theme: "system",
   brand: "orange",
   accent: "red",
-  rounded: "playful",
+  rounded: "rounded",
   surface: "translucent",
 };
 
 const effects: EffectsConfig = {
   mask: {
-    cursor: true,
+    cursor: false,
     x: 50,
-    y: 10,
+    y: 0,
     radius: 100,
   },
   gradient: {
     display: true,
-    opacity: 75,
+    opacity: 100,
     x: 50,
-    y: 20,
+    y: 0,
     width: 100,
-    height: 50,
+    height: 60,
     tilt: 0,
     colorStart: "var(--brand-glow)",
     colorEnd: "transparent",
   },
   dots: {
     display: true,
-    opacity: 35,
+    opacity: 14,
     size: "2",
     color: "var(--brand-primary)",
   },
   grid: {
-    display: true,
-    opacity: 25,
+    display: false,
+    opacity: 22,
     color: "var(--border-subtle)",
     width: "3rem",
     height: "3rem",
@@ -126,7 +126,7 @@ const newsletterForm: NewsletterFormConfig = {
     },
     gradient: {
       display: true,
-      opacity: 85,
+      opacity: 55,
       x: 50,
       y: 0,
       width: 60,
@@ -136,14 +136,14 @@ const newsletterForm: NewsletterFormConfig = {
       colorEnd: "transparent",
     },
     dots: {
-      display: true,
+      display: false,
       opacity: 25,
       size: "2",
       color: "var(--brand-primary)",
     },
     grid: {
-      display: false,
-      opacity: 100,
+      display: true,
+      opacity: 18,
       color: "var(--border-subtle)",
       width: "1rem",
       height: "1rem",

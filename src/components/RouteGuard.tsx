@@ -97,10 +97,10 @@ export const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
           <Icon name="lock" size="l" />
         </div>
         <h1 className="font-heading text-2xl font-bold text-fg">
-          Protected Playbook Page
+          Restricted Research Note
         </h1>
         <p className="text-sm text-fg-muted">
-          Enter the team access password to view this restricted scouting report or project.
+          Enter the access password to view this private write-up or benchmark.
         </p>
         <div className="flex w-full flex-col gap-3">
           <PasswordInput

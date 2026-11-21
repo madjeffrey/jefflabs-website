@@ -1,21 +1,10 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { ToggleButton } from "@/components/ui/Button";
+import { Icon } from "@/components/ui/Icon";
 import { useTheme } from "@/components/Providers";
 
-interface ThemeToggleProps {
-  size?: "s" | "m" | "l" | "xl";
-  variant?: "ghost" | "outline" | "subtle";
-  className?: string;
-  style?: React.CSSProperties;
-}
-
-export const ThemeToggle: React.FC<ThemeToggleProps> = ({
-  size = "s",
-  variant = "ghost",
-  ...props
-}) => {
+export const ThemeToggle: React.FC = () => {
   const { setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [currentTheme, setCurrentTheme] = useState<"light" | "dark">("dark");
@@ -44,8 +33,7 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
     return () => observer.disconnect();
   }, []);
 
-  const handleToggle = (e: React.MouseEvent) => {
-    e.preventDefault();
+  const handleToggle = () => {
     const next = currentTheme === "dark" ? "light" : "dark";
     setCurrentTheme(next);
     document.documentElement.setAttribute("data-theme", next);
@@ -57,31 +45,30 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
     setTheme(next);
   };
 
-  const icon = currentTheme === "dark" ? "light" : "dark";
-  const label =
-    currentTheme === "dark" ? "Switch to light mode" : "Switch to dark mode";
-
   if (!mounted) {
     return (
-      <ToggleButton
-        size={size}
-        variant={variant}
-        prefixIcon="light"
+      <button
+        type="button"
         aria-label="Toggle theme"
-        {...props}
-      />
+        className="inline-flex h-7 w-7 items-center justify-center rounded-full text-fg-muted transition-colors hover:bg-neutral-alpha-weak hover:text-fg"
+      >
+        <Icon name="dark" size="s" />
+      </button>
     );
   }
 
+  const isDark = currentTheme === "dark";
+  const label = isDark ? "Switch to light mode" : "Switch to dark mode";
+
   return (
-    <ToggleButton
-      size={size}
-      variant={variant}
-      prefixIcon={icon}
+    <button
+      type="button"
       onClick={handleToggle}
       aria-label={label}
       title={label}
-      {...props}
-    />
+      className="inline-flex h-7 w-7 items-center justify-center rounded-full text-fg-muted transition-colors hover:bg-neutral-alpha-weak hover:text-fg"
+    >
+      <Icon name={isDark ? "light" : "dark"} size="s" />
+    </button>
   );
 };

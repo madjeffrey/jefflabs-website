@@ -23,7 +23,7 @@ export const Input: React.FC<InputProps> = ({
           placeholder={label ?? props.placeholder}
           aria-label={label ?? props.placeholder}
           aria-invalid={!!errorMessage}
-          className={`w-full rounded-full border bg-surface-elevated px-4 py-2.5 text-sm text-fg placeholder:text-fg-subtle transition-all duration-200 focus:border-brand focus:outline-none ${
+          className={`w-full rounded-full border bg-surface-elevated px-4 py-2.5 text-sm text-fg placeholder:text-fg-subtle transition-all duration-200 focus:border-fg/40 focus:outline-none ${
             errorMessage ? "border-rose-500" : "border-border-strong"
           } ${className}`.trim()}
           {...props}
@@ -56,7 +56,7 @@ export const PasswordInput: React.FC<InputProps> = ({
           placeholder={label ?? "Enter password"}
           aria-label={label ?? "Password"}
           aria-invalid={!!errorMessage}
-          className={`w-full rounded-full border bg-surface-elevated pl-4 pr-10 py-2.5 text-sm text-fg placeholder:text-fg-subtle transition-all duration-200 focus:border-brand focus:outline-none ${
+          className={`w-full rounded-full border bg-surface-elevated pl-4 pr-10 py-2.5 text-sm text-fg placeholder:text-fg-subtle transition-all duration-200 focus:border-fg/40 focus:outline-none ${
             errorMessage ? "border-rose-500" : "border-border-strong"
           } ${className}`.trim()}
           {...props}

@@ -72,7 +72,7 @@ const socialPlatforms: Record<string, SocialPlatform> = {
     icon: "email",
     label: "Email",
     generateUrl: (title, url) =>
-      `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(`Check out this volleyball & engineering post: ${url}`)}`,
+      `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(`Check out this blog post: ${url}`)}`,
   },
 };
 
@@ -104,7 +104,7 @@ export function ShareSection({ title, url }: ShareSectionProps) {
   return (
     <div className="my-8 flex w-full flex-wrap items-center justify-center gap-4 border-y border-border py-6">
       <span className="text-xs font-semibold uppercase tracking-wider text-fg-muted">
-        Share this playbook:
+        Share this post:
       </span>
       <div className="flex flex-wrap items-center justify-center gap-2.5">
         {enabledPlatforms.map((platform, index) => (

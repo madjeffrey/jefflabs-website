@@ -3,8 +3,6 @@
 import { usePathname } from "next/navigation";
 import React, { Fragment, useEffect, useState } from "react";
 import { ToggleButton } from "@/components/ui/Button";
-import { Icon } from "@/components/ui/Icon";
-import { ThemeToggle } from "./ThemeToggle";
 import { routes, display, person, about, blog, work, gallery } from "@/resources";
 import type { IconName } from "@/resources/icons";
 
@@ -39,14 +37,14 @@ const TimeDisplay: React.FC<TimeDisplayProps> = ({ timeZone, locale = "en-GB" })
     return () => clearInterval(intervalId);
   }, [timeZone, locale]);
 
-  return <span className="font-mono text-xs tracking-wider text-fg-muted">{currentTime}</span>;
+  return <span className="font-mono text-xs tracking-wider text-fg-subtle">{currentTime}</span>;
 };
 
 export default TimeDisplay;
 
 const navItems: { href: keyof typeof routes; icon: IconName; label: string }[] = [
   { href: "/about", icon: "person", label: about.label },
-  { href: "/work", icon: "volleyball", label: work.label },
+  { href: "/work", icon: "grid", label: work.label },
   { href: "/blog", icon: "book", label: blog.label },
   { href: "/gallery", icon: "gallery", label: gallery.label },
 ];
@@ -66,18 +64,13 @@ export const Header: React.FC = () => {
       />
 
       <header className="fixed bottom-5 inset-x-0 z-30 flex w-full items-center justify-between px-4 md:sticky md:top-4 md:bottom-auto md:px-8">
-        <div className="hidden md:flex flex-1 items-center gap-2 text-xs font-medium text-fg-muted">
-          {display.location && (
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-surface/60 px-3 py-1 backdrop-blur-md">
-              <Icon name="globe" size="xs" className="text-brand" />
-              <span>{person.location}</span>
-            </span>
-          )}
+        <div className="hidden md:flex flex-1 items-center text-xs text-fg-subtle">
+          {display.location && <span>{person.location}</span>}
         </div>
 
         <nav
           aria-label="Primary Navigation"
-          className="mx-auto flex items-center gap-1 rounded-2xl border border-border-strong bg-surface-glass p-1.5 shadow-glass backdrop-blur-xl"
+          className="mx-auto flex items-center gap-0.5 rounded-full bg-[var(--nav-bg)] p-1 shadow-[0_8px_28px_-6px_rgba(0,0,0,0.4)] backdrop-blur-xl"
         >
           {routes["/"] && (
             <ToggleButton
@@ -87,7 +80,7 @@ export const Header: React.FC = () => {
               selected={pathname === "/"}
             />
           )}
-          <div className="mx-1 h-5 w-px bg-border-strong" />
+          <div className="mx-0.5 h-4 w-px bg-border-strong" />
           {navItems.map(
             (item) =>
               routes[item.href] && (
@@ -111,21 +104,10 @@ export const Header: React.FC = () => {
                 </Fragment>
               ),
           )}
-          {display.themeSwitcher && (
-            <>
-              <div className="mx-1 h-5 w-px bg-border-strong" />
-              <ThemeToggle size="s" />
-            </>
-          )}
         </nav>
 
-        <div className="hidden md:flex flex-1 items-center justify-end gap-3">
-          {display.time && (
-            <div className="inline-flex items-center gap-2 rounded-full border border-border bg-surface/60 px-3 py-1 backdrop-blur-md">
-              <span className="h-2 w-2 rounded-full bg-brand animate-pulse" />
-              <TimeDisplay timeZone={person.location} />
-            </div>
-          )}
+        <div className="hidden md:flex flex-1 items-center justify-end">
+          {display.time && <TimeDisplay timeZone={person.location} />}
         </div>
       </header>
     </>

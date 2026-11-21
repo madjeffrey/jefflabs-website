@@ -45,14 +45,14 @@ export const Newsletter: React.FC<{ className?: string }> = ({ className = "" })
 
   return (
     <section
-      className={`relative my-8 flex w-full flex-col items-center overflow-hidden rounded-2xl border border-border-brand bg-surface px-6 py-12 text-center shadow-glass backdrop-blur-md sm:px-12 ${className}`.trim()}
+      className={`relative my-8 flex w-full flex-col items-center overflow-hidden rounded-2xl border border-border bg-surface px-6 py-12 text-center shadow-glass backdrop-blur-md sm:px-12 ${className}`.trim()}
     >
       <BackgroundEffects effects={newsletterForm.effects} contained />
 
       <div className="relative z-10 flex max-w-lg flex-col items-center gap-3">
-        <span className="inline-flex items-center gap-1.5 rounded-full border border-border-brand bg-brand-soft px-3 py-1 text-xs font-semibold text-brand">
-          <Icon name="volleyball" size="xs" />
-          <span>Court & Code Dispatch</span>
+        <span className="inline-flex items-center gap-1.5 rounded-full border border-border-brand bg-brand-soft px-3 py-1 font-mono text-xs font-semibold text-brand">
+          <Icon name="article" size="xs" />
+          <span>Newsletter</span>
         </span>
         <h2 className="font-heading text-2xl font-bold tracking-tight text-fg sm:text-3xl">
           {newsletter.title}
@@ -67,7 +67,7 @@ export const Newsletter: React.FC<{ className?: string }> = ({ className = "" })
             className="mt-4 inline-flex items-center gap-2 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-5 py-2.5 text-sm font-medium text-emerald-400"
           >
             <Icon name="check" size="s" />
-            <span>You're on the roster! Thanks for subscribing.</span>
+            <span>Subscribed — thank you for joining.</span>
           </div>
         ) : (
           <form

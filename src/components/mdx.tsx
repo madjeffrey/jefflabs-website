@@ -3,6 +3,7 @@ import React, { ReactNode } from "react";
 import { slugify as transliterate } from "transliteration";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
+import katex from "katex";
 
 import { HeadingLink } from "@/components/HeadingLink";
 import { CodeBlock, InlineCode } from "@/components/ui/CodeBlock";
@@ -67,7 +68,7 @@ function createHeading(as: "h1" | "h2" | "h3" | "h4" | "h5" | "h6") {
 
 function createParagraph({ children }: { children: ReactNode }) {
   return (
-    <p className="my-3.5 text-base leading-[1.8] text-fg-muted">
+    <p className="my-3.5 text-base leading-[1.8] text-fg">
       {children}
     </p>
   );
@@ -103,7 +104,7 @@ function createList(as: "ul" | "ol") {
   const ListTag = as;
   return ({ children }: { children: ReactNode }) => (
     <ListTag
-      className={`my-4 space-y-2 pl-6 text-fg-muted ${
+      className={`my-4 space-y-2 pl-6 text-fg ${
         as === "ol" ? "list-decimal" : "list-disc marker:text-brand"
       }`}
     >
@@ -118,6 +119,19 @@ function createListItem({ children }: { children: ReactNode }) {
 
 function createHR() {
   return <hr className="my-8 border-border-strong" />;
+}
+
+function MathBlock({ formula }: { formula: string }) {
+  const html = katex.renderToString(formula, {
+    displayMode: true,
+    throwOnError: false,
+  });
+  return (
+    <div
+      className="my-6 overflow-x-auto rounded-2xl border border-border-brand bg-brand-soft/30 px-4 py-4 text-center text-fg"
+      dangerouslySetInnerHTML={{ __html: html }}
+    />
+  );
 }
 
 const components = {
@@ -138,6 +152,7 @@ const components = {
   hr: createHR as any,
   CodeBlock,
   InlineCode,
+  MathBlock,
   Accordion,
   AccordionGroup,
   Table,
