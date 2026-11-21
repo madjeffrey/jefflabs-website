@@ -1,28 +1,35 @@
+import React from "react";
 import { About, Blog, Gallery, Home, Newsletter, Person, Social, Work } from "@/types";
-import { Line, Row, Text } from "@once-ui-system/core";
 
 const person: Person = {
   firstName: "Jeff",
   lastName: "Madro",
-  name: `Jeff Madro`,
-  role: "Ai Engineer",
+  name: "Jeff Madro",
+  role: "Senior AI & Reinforcement Learning Engineer",
   avatar: "/images/profile2.jpg",
   email: "jeffmadro@gmail.com",
-  location: "Canada/Mountain", // Expecting the IANA time zone identifier, e.g., 'Europe/Vienna'
-  languages: ["English", "Bahasa"], // optional: Leave the array empty if you don't want to display languages
-  locale: "en", // BCP 47 language tag for the HTML lang attribute, e.g., 'en', 'ja', 'zh-TW'
+  location: "Canada/Mountain",
+  languages: ["English", "French"],
+  locale: "en",
+  research: {
+    focus: "Reinforcement Learning & Autonomous Decision Systems",
+    domains: ["Reinforcement Learning", "Robotics & Control", "Games & Multi-Agent AI"],
+    coreStack: ["PyTorch", "JAX", "C++", "MuJoCo", "Isaac Lab", "ROS 2", "CUDA", "TypeScript"],
+  },
 };
 
 const newsletter: Newsletter = {
   display: true,
-  title: <>Subscribe to {person.firstName}'s Newsletter</>,
-  description: <>My weekly newsletter about creativity and engineering</>,
+  title: <>Subscribe to new posts</>,
+  description: (
+    <>
+      Occasional essays and reflections on AI, philosophy, and lessons learned — straight to your
+      inbox.
+    </>
+  ),
 };
 
 const social: Social = [
-  // Links are automatically displayed.
-  // Import new icons in /once-ui/icons.ts
-  // Set essentials: true for links you want to show on the about page
   {
     name: "GitHub",
     icon: "github",
@@ -32,21 +39,9 @@ const social: Social = [
   {
     name: "LinkedIn",
     icon: "linkedin",
-    link: "https://www.linkedin.com/in/jeff-mad/?isSelfProfile=true",
+    link: "https://www.linkedin.com/in/jeff-mad/",
     essential: true,
   },
-  // {
-  //   name: "Instagram",
-  //   icon: "instagram",
-  //   link: "https://www.instagram.com/once_ui/",
-  //   essential: false,
-  // },
-  // {
-  //   name: "Threads",
-  //   icon: "threads",
-  //   link: "https://www.threads.com/@once_ui",
-  //   essential: true,
-  // },
   {
     name: "Email",
     icon: "email",
@@ -59,38 +54,62 @@ const home: Home = {
   path: "/",
   image: "/images/og/home.jpg",
   label: "Home",
-  title: `Jeff's Lab`,
-  description: `Portfolio website showcasing my work as a ${person.role}`,
-  headline: <>Building bridges between design and code</>,
+  title: "Jeff's Lab",
+  description: `Portfolio and blog of ${person.name}, Senior AI Engineer specializing in reinforcement learning, robotics control, and game AI systems.`,
+  headline: <>Reinforcement learning for robotics and games</>,
   featured: {
     display: true,
     title: (
-      <Row gap="12" vertical="center">
-        <strong className="ml-4">Once UI</strong>{" "}
-        <Line background="brand-alpha-strong" vert height="20" />
-        <Text marginRight="4" onBackground="brand-medium">
-          Featured work
-        </Text>
-      </Row>
+      <span className="inline-flex items-center gap-3">
+        <span className="font-medium text-fg">Sim-to-Real RL</span>
+        <span className="h-3.5 w-px bg-border-brand" />
+        <span className="text-brand">Featured work</span>
+      </span>
     ),
-    href: "/work/building-once-ui-a-customizable-design-system",
+    href: "/work",
   },
   subline: (
     <>
-      I'm {person.firstName}, a {person.role.toLowerCase()} at{" "}
-      <Text as="span" size="xl" weight="strong">
-        ONCE UI
-      </Text>
-      , where I craft intuitive <br /> user experiences. After hours, I build my own projects.
+      I&apos;m {person.firstName}, a senior AI engineer researching{" "}
+      <strong className="font-semibold text-fg">reinforcement learning</strong>,{" "}
+      <strong className="font-semibold text-fg">robotics</strong>, and{" "}
+      <strong className="font-semibold text-fg">games</strong> — building scalable
+      control and decision systems.
     </>
   ),
+  researchPillars: [
+    {
+      title: "Reinforcement Learning",
+      tag: "CORE RESEARCH",
+      icon: "brain",
+      description:
+        "Policy optimization, sample-efficient world models, reward design, and high-throughput distributed training.",
+      topics: ["PPO / SAC", "World Models", "Offline RL"],
+    },
+    {
+      title: "Robotics & Control",
+      tag: "SIM-TO-REAL",
+      icon: "robot",
+      description:
+        "Whole-body legged locomotion, contact-rich manipulation, GPU physics simulation, and zero-shot hardware transfer.",
+      topics: ["MuJoCo", "Isaac Lab", "Domain Randomization"],
+    },
+    {
+      title: "Games & Decision AI",
+      tag: "MULTI-AGENT",
+      icon: "gamepad",
+      description:
+        "Self-play training, batched MCTS planning, opponent modeling, and adaptive agents in imperfect-information games.",
+      topics: ["MCTS / AlphaZero", "Self-Play", "MARL"],
+    },
+  ],
 };
 
 const about: About = {
   path: "/about",
   label: "About",
   title: `About – ${person.name}`,
-  description: `Meet ${person.name}, ${person.role} from ${person.location}`,
+  description: `Meet ${person.name}, ${person.role} focused on reinforcement learning, robotics, and games.`,
   tableOfContent: {
     display: true,
     subItems: false,
@@ -98,8 +117,9 @@ const about: About = {
   avatar: {
     display: true,
   },
+  // Enable after adding a personal scheduling URL
   calendar: {
-    display: true,
+    display: false,
     link: "https://cal.com",
   },
   intro: {
@@ -107,53 +127,54 @@ const about: About = {
     title: "Introduction",
     description: (
       <>
-        {person.firstName} is a {person.location.split("/")[1]?.replace("_", " ")}-based{" "}
-        {person.role.toLowerCase()} with a passion for transforming complex challenges into simple,
-        elegant design solutions. Their work spans digital interfaces, interactive experiences, and
-        the convergence of design and technology.
+        <p>
+          {person.firstName} is a senior AI and reinforcement learning engineer focused on building
+          autonomous decision-making systems that operate reliably under physical and strategic
+          uncertainty. His work spans policy optimization, learned world models, and scalable
+          distributed simulation for continuous control and multi-agent environments.
+        </p>
+        <p>
+          Across robotics and games, he builds end-to-end training and evaluation infrastructure —
+          from vectorized GPU physics rollouts and sim-to-real system identification to batched
+          Monte Carlo Tree Search engines and reproducible experiment benchmarks.
+        </p>
       </>
     ),
   },
   work: {
-    display: true, // set to false to hide this section
+    display: true,
     title: "Work Experience",
     experiences: [
       {
-        company: "FLY",
-        timeframe: "2022 - Present",
-        role: "Senior Design Engineer",
+        company: "Jeff's Lab — Independent RL Research & Systems",
+        timeframe: "2023 - Present",
+        role: "Senior AI & Reinforcement Learning Engineer",
         achievements: [
           <>
-            Redesigned the UI/UX for the FLY platform, resulting in a 20% increase in user
-            engagement and 30% faster load times.
+            Designed GPU-accelerated reinforcement learning pipelines and asymmetric actor-critic
+            policies for legged locomotion and contact-rich manipulation tasks with zero-shot
+            sim-to-real transfer.
           </>,
           <>
-            Spearheaded the integration of AI tools into design workflows, enabling designers to
-            iterate 50% faster.
+            Engineered distributed self-play and batched tree-search evaluation harnesses in
+            Python, JAX, and C++ to benchmark policy robustness against adaptive agents.
           </>,
         ],
-        images: [
-          // optional: leave the array empty if you don't want to display images
-          {
-            src: "/images/projects/project-01/cover-01.jpg",
-            alt: "Once UI Project",
-            width: 16,
-            height: 9,
-          },
-        ],
+        images: [],
       },
       {
-        company: "Creativ3",
-        timeframe: "2018 - 2022",
-        role: "Lead Designer",
+        company: "Autonomous Systems & ML Engineering",
+        timeframe: "2020 - 2023",
+        role: "Machine Learning Systems Engineer",
         achievements: [
           <>
-            Developed a design system that unified the brand across multiple platforms, improving
-            design consistency by 40%.
+            Built low-latency perception, state estimation, and real-time inference services
+            integrating PyTorch models with C++ runtime pipelines and ROS 2 control loops.
           </>,
           <>
-            Led a cross-functional team to launch a new product line, contributing to a 15% increase
-            in overall company revenue.
+            Architected reproducible experiment tracking, automated regression suites, and
+            full-stack visualization interfaces for inspecting policy rollouts and reward
+            diagnostics.
           </>,
         ],
         images: [],
@@ -161,74 +182,107 @@ const about: About = {
     ],
   },
   studies: {
-    display: true, // set to false to hide this section
-    title: "Studies",
+    display: true,
+    title: "Education",
     institutions: [
       {
-        name: "University of Jakarta",
-        description: <>Studied software engineering.</>,
+        name: "Machine Learning & Reinforcement Learning",
+        description: (
+          <>
+            Policy gradient methods, off-policy actor-critic architectures, model-based planning,
+            and multi-agent self-play dynamics.
+          </>
+        ),
       },
       {
-        name: "Build the Future",
-        description: <>Studied online marketing and personal branding.</>,
+        name: "Robotics, Control & Simulation Systems",
+        description: (
+          <>
+            Rigid-body physics simulation, state estimation, domain randomization, and real-time
+            embedded inference for hardware deployment.
+          </>
+        ),
       },
     ],
   },
   technical: {
-    display: true, // set to false to hide this section
-    title: "Technical skills",
+    display: true,
+    title: "Technical Skills",
     skills: [
       {
-        title: "Figma",
-        description: <>Able to prototype in Figma with Once UI with unnatural speed.</>,
+        title: "Reinforcement Learning & Deep Learning",
+        description: (
+          <>
+            Implementing vectorized training loops, custom policy/value architectures, latent world
+            models, and GPU-accelerated tree search pipelines.
+          </>
+        ),
         tags: [
-          {
-            name: "Figma",
-            icon: "figma",
-          },
+          { name: "Python", icon: "python" },
+          { name: "PyTorch", icon: "pytorch" },
+          { name: "CUDA / NVIDIA", icon: "nvidia" },
         ],
-        // optional: leave the array empty if you don't want to display images
-        images: [
-          {
-            src: "/images/projects/project-01/cover-02.jpg",
-            alt: "Project image",
-            width: 16,
-            height: 9,
-          },
-          {
-            src: "/images/projects/project-01/cover-03.jpg",
-            alt: "Project image",
-            width: 16,
-            height: 9,
-          },
-        ],
+        images: [],
       },
       {
-        title: "Next.js",
-        description: <>Building next gen apps with Next.js + Once UI + Supabase.</>,
+        title: "Robotics Simulation & Control",
+        description: (
+          <>
+            Developing high-frequency control loops, physics environments, visual state estimation,
+            and sim-to-real deployment pipelines.
+          </>
+        ),
         tags: [
-          {
-            name: "JavaScript",
-            icon: "javascript",
-          },
-          {
-            name: "Next.js",
-            icon: "nextjs",
-          },
-          {
-            name: "Supabase",
-            icon: "supabase",
-          },
+          { name: "C++", icon: "cplusplus" },
+          { name: "ROS 2", icon: "ros" },
+          { name: "OpenCV", icon: "opencv" },
+          { name: "Linux", icon: "linux" },
         ],
-        // optional: leave the array empty if you don't want to display images
-        images: [
-          {
-            src: "/images/projects/project-01/cover-04.jpg",
-            alt: "Project image",
-            width: 16,
-            height: 9,
-          },
+        images: [],
+      },
+      {
+        title: "Systems, Tooling & Web",
+        description: (
+          <>
+            Building reproducible containerized workloads, high-throughput telemetry backends, and
+            clean interactive research dashboards.
+          </>
+        ),
+        tags: [
+          { name: "TypeScript", icon: "typescript" },
+          { name: "Next.js", icon: "nextjs" },
+          { name: "Docker", icon: "docker" },
+          { name: "Rust", icon: "rust" },
         ],
+        images: [],
+      },
+    ],
+  },
+  awards: {
+    display: true,
+    title: "Awards",
+    items: [
+      {
+        title: "Best Paper / Outstanding Project Recognition",
+        issuer: "Reinforcement Learning & Robotics Symposium",
+        date: "2024",
+        description: (
+          <>
+            Recognized for sim-to-real locomotion transfer and high-throughput GPU physics
+            benchmarking.
+          </>
+        ),
+      },
+      {
+        title: "Dean's Honor List / Academic Distinction",
+        issuer: "Faculty of Engineering & Computer Science",
+        date: "2022",
+        description: (
+          <>
+            Awarded for top academic standing in machine learning, control systems, and software
+            engineering coursework.
+          </>
+        ),
       },
     ],
   },
@@ -237,68 +291,72 @@ const about: About = {
 const blog: Blog = {
   path: "/blog",
   label: "Blog",
-  title: "Writing about design and tech...",
-  description: `Read what ${person.name} has been up to recently`,
-  // Create new blog posts by adding a new .mdx file to app/blog/posts
-  // All posts will be listed on the /blog route
+  title: "Thoughts & Notes",
+  description:
+    "Things I am thinking about — essays, reflections, and notes on AI, philosophy, and lessons learned along the way.",
 };
 
 const work: Work = {
   path: "/work",
-  label: "Work",
-  title: `Projects – ${person.name}`,
-  description: `Design and dev projects by ${person.name}`,
-  // Create new project pages by adding a new .mdx file to app/blog/posts
-  // All projects will be listed on the /home and /work routes
+  label: "Projects",
+  title: "Projects & Systems",
+  description:
+    "Selected reinforcement learning research, robotics control architectures, and game-playing agent systems.",
 };
 
 const gallery: Gallery = {
   path: "/gallery",
   label: "Gallery",
-  title: `Photo gallery – ${person.name}`,
-  description: `A photo collection by ${person.name}`,
-  // Images by https://lorant.one
-  // These are placeholder images, replace with your own
+  title: "Lab & Visual Archive",
+  description: `Selected simulation renders, hardware experiments, and visual system benchmarks by ${person.name}.`,
   images: [
     {
       src: "/images/gallery/horizontal-1.jpg",
-      alt: "image",
+      alt: "Quadruped locomotion policy rollout across uneven terrain",
       orientation: "horizontal",
+      caption: "Sim-to-Real Locomotion — Rough-terrain traversal benchmark",
     },
     {
       src: "/images/gallery/vertical-4.jpg",
-      alt: "image",
+      alt: "Dexterous robotic gripper contact sequence",
       orientation: "vertical",
+      caption: "Contact-Rich Manipulation — Tactile grasp stabilization",
     },
     {
       src: "/images/gallery/horizontal-3.jpg",
-      alt: "image",
+      alt: "Distributed rollout cluster and telemetry monitor",
       orientation: "horizontal",
+      caption: "Vectorized Physics — Multi-GPU environment throughput bench",
     },
     {
       src: "/images/gallery/vertical-1.jpg",
-      alt: "image",
+      alt: "Actuator torque response calibration rig",
       orientation: "vertical",
+      caption: "System Identification — Motor delay and friction sweep",
     },
     {
       src: "/images/gallery/vertical-2.jpg",
-      alt: "image",
+      alt: "Vision-based pose estimation camera mount",
       orientation: "vertical",
+      caption: "Perception Pipeline — High-frequency state estimation setup",
     },
     {
       src: "/images/gallery/horizontal-2.jpg",
-      alt: "image",
+      alt: "Multi-agent strategy evaluation arena",
       orientation: "horizontal",
+      caption: "Self-Play Evaluation — Batched MCTS policy tournament",
     },
     {
       src: "/images/gallery/horizontal-4.jpg",
-      alt: "image",
+      alt: "Reward shaping and policy convergence review",
       orientation: "horizontal",
+      caption: "Experiment Diagnostics — Comparing value-head calibration",
     },
     {
       src: "/images/gallery/vertical-3.jpg",
-      alt: "image",
+      alt: "Embedded edge inference hardware module",
       orientation: "vertical",
+      caption: "Edge Deployment — Real-time TensorRT policy runtime",
     },
   ],
 };

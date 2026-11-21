@@ -1,21 +1,16 @@
+import React from "react";
 import {
   Avatar,
   Button,
-  Column,
-  Heading,
   Icon,
   IconButton,
   Media,
   Tag,
-  Text,
   Meta,
   Schema,
-  Row,
-} from "@once-ui-system/core";
+} from "@/components";
 import { baseURL, about, person, social } from "@/resources";
 import TableOfContents from "@/components/about/TableOfContents";
-import styles from "@/components/about/about.module.scss";
-import React from "react";
 
 export async function generateMetadata() {
   return Meta.generate({
@@ -35,23 +30,33 @@ export default function About() {
       items: [],
     },
     {
-      title: about.work.title,
-      display: about.work.display,
-      items: about.work.experiences.map((experience) => experience.company),
-    },
-    {
       title: about.studies.title,
       display: about.studies.display,
       items: about.studies.institutions.map((institution) => institution.name),
+    },
+    {
+      title: about.work.title,
+      display: about.work.display,
+      items: about.work.experiences.map((experience) => experience.company),
     },
     {
       title: about.technical.title,
       display: about.technical.display,
       items: about.technical.skills.map((skill) => skill.title),
     },
+    ...(about.awards
+      ? [
+          {
+            title: about.awards.title,
+            display: about.awards.display,
+            items: about.awards.items.map((award) => award.title),
+          },
+        ]
+      : []),
   ];
+
   return (
-    <Column maxWidth="m">
+    <div className="w-full max-w-7xl py-6 lg:pl-40 2xl:pl-16">
       <Schema
         as="webPage"
         baseURL={baseURL}
@@ -65,280 +70,263 @@ export default function About() {
           image: `${baseURL}${person.avatar}`,
         }}
       />
+
       {about.tableOfContent.display && (
-        <Column
-          left="0"
-          style={{ top: "50%", transform: "translateY(-50%)" }}
-          position="fixed"
-          paddingLeft="24"
-          gap="32"
-          s={{ hide: true }}
-        >
-          <TableOfContents structure={structure} about={about} />
-        </Column>
+        <TableOfContents structure={structure} about={about} />
       )}
-      <Row fillWidth s={{ direction: "column" }} horizontal="center">
+
+      <div className="flex w-full flex-col gap-10 md:flex-row md:items-start md:gap-10 lg:gap-12">
         {about.avatar.display && (
-          <Column
-            className={styles.avatar}
-            top="64"
-            fitHeight
-            position="sticky"
-            s={{ position: "relative", style: { top: "auto" } }}
-            xs={{ style: { top: "auto" } }}
-            minWidth="160"
-            paddingX="l"
-            paddingBottom="xl"
-            gap="m"
-            flex={3}
-            horizontal="center"
-          >
-            <Avatar src={person.avatar} size="xl" aria-label={person.name} />
-            <Row gap="8" vertical="center">
-              <Icon onBackground="accent-weak" name="globe" />
-              {person.location}
-            </Row>
+          <aside className="flex shrink-0 flex-col items-center gap-4 md:sticky md:top-24 md:w-44 lg:w-48">
+            <Avatar
+              src={person.avatar}
+              size="xl"
+              aria-label={person.name}
+            />
+
+            <div className="flex items-center gap-2 text-sm text-fg">
+              <Icon name="globe" size="s" className="text-brand" />
+              <span>{person.location}</span>
+            </div>
+
             {person.languages && person.languages.length > 0 && (
-              <Row wrap gap="8">
+              <div className="flex flex-wrap justify-center gap-2">
                 {person.languages.map((language, index) => (
-                  <Tag key={index} size="l">
+                  <Tag key={index} size="m">
                     {language}
                   </Tag>
                 ))}
-              </Row>
+              </div>
             )}
-          </Column>
+          </aside>
         )}
-        <Column className={styles.blockAlign} flex={9} maxWidth={40}>
-          <Column
+
+        <div className="flex min-w-0 flex-1 flex-col gap-16">
+          <section
             id={about.intro.title}
-            fillWidth
-            minHeight="160"
-            vertical="center"
-            marginBottom="32"
+            className="flex flex-col items-center text-center md:items-start md:text-left"
           >
             {about.calendar.display && (
-              <Row
-                fitWidth
-                border="brand-alpha-medium"
-                background="brand-alpha-weak"
-                radius="full"
-                padding="4"
-                gap="8"
-                marginBottom="m"
-                vertical="center"
-                className={styles.blockAlign}
-                style={{
-                  backdropFilter: "blur(var(--static-space-1))",
-                }}
-              >
-                <Icon paddingLeft="12" name="calendar" onBackground="brand-weak" />
-                <Row paddingX="8">Schedule a call</Row>
+              <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-border-brand bg-brand-soft p-1.5 pl-3.5 backdrop-blur-md">
+                <Icon name="calendar" size="s" className="text-brand" />
+                <span className="text-xs font-semibold text-fg px-1">
+                  Schedule a technical chat
+                </span>
                 <IconButton
                   href={about.calendar.link}
-                  data-border="rounded"
                   variant="secondary"
+                  size="s"
                   icon="chevronRight"
                   aria-label="Schedule a call"
                 />
-              </Row>
+              </div>
             )}
-            <Heading className={styles.textAlign} variant="display-strong-xl">
+
+            <h1 className="font-heading text-4xl sm:text-5xl font-bold tracking-tight text-fg">
               {person.name}
-            </Heading>
-            <Text
-              className={styles.textAlign}
-              variant="display-default-xs"
-              onBackground="neutral-weak"
-            >
+            </h1>
+            <p className="mt-1.5 text-lg sm:text-xl font-normal text-fg-muted">
               {person.role}
-            </Text>
+            </p>
+
             {social.length > 0 && (
-              <Row
-                className={styles.blockAlign}
-                paddingTop="20"
-                paddingBottom="8"
-                gap="8"
-                wrap
-                horizontal="center"
-                fitWidth
-                data-border="rounded"
-              >
+              <div className="mt-5 flex flex-wrap items-center justify-center gap-2 md:justify-start">
                 {social
                   .filter((item) => item.essential)
                   .map(
                     (item) =>
                       item.link && (
-                        <React.Fragment key={item.name}>
-                          <Row s={{ hide: true }}>
-                            <Button
-                              key={item.name}
-                              href={item.link}
-                              prefixIcon={item.icon}
-                              label={item.name}
-                              size="s"
-                              weight="default"
-                              variant="secondary"
-                            />
-                          </Row>
-                          <Row hide s={{ hide: false }}>
-                            <IconButton
-                              size="l"
-                              key={`${item.name}-icon`}
-                              href={item.link}
-                              icon={item.icon}
-                              variant="secondary"
-                              aria-label={item.name}
-                            />
-                          </Row>
-                        </React.Fragment>
+                        <Button
+                          key={item.name}
+                          href={item.link}
+                          prefixIcon={item.icon}
+                          label={item.name}
+                          size="s"
+                          variant="secondary"
+                        />
                       ),
                   )}
-              </Row>
+              </div>
             )}
-          </Column>
 
-          {about.intro.display && (
-            <Column textVariant="body-default-l" fillWidth gap="m" marginBottom="xl">
-              {about.intro.description}
-            </Column>
+            {about.intro.display && (
+              <div className="mt-8 space-y-4 text-base leading-relaxed text-fg/85">
+                {about.intro.description}
+              </div>
+            )}
+          </section>
+
+          {about.studies.display && (
+            <section className="flex flex-col gap-6">
+              <h2
+                id={about.studies.title}
+                className="font-heading text-3xl sm:text-4xl font-bold tracking-tight text-fg"
+              >
+                {about.studies.title}
+              </h2>
+              <div className="flex flex-col gap-7">
+                {about.studies.institutions.map((institution, index) => (
+                  <div key={`${institution.name}-${index}`}>
+                    <div className="flex flex-wrap items-baseline justify-between gap-2">
+                      <h3
+                        id={institution.name}
+                        className="font-heading text-lg sm:text-xl font-bold text-fg"
+                      >
+                        {institution.name}
+                      </h3>
+                      {institution.timeframe && (
+                        <span className="text-sm text-fg-muted">{institution.timeframe}</span>
+                      )}
+                    </div>
+                    {institution.degree && (
+                      <div className="mt-0.5 text-sm text-brand">{institution.degree}</div>
+                    )}
+                    <div className="mt-1.5 text-sm sm:text-base leading-relaxed text-fg-muted">
+                      {institution.description}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
           )}
 
           {about.work.display && (
-            <>
-              <Heading as="h2" id={about.work.title} variant="display-strong-s" marginBottom="m">
+            <section className="flex flex-col gap-6">
+              <h2
+                id={about.work.title}
+                className="font-heading text-3xl sm:text-4xl font-bold tracking-tight text-fg"
+              >
                 {about.work.title}
-              </Heading>
-              <Column fillWidth gap="l" marginBottom="40">
+              </h2>
+              <div className="flex flex-col gap-10">
                 {about.work.experiences.map((experience, index) => (
-                  <Column key={`${experience.company}-${experience.role}-${index}`} fillWidth>
-                    <Row fillWidth horizontal="between" vertical="end" marginBottom="4">
-                      <Text id={experience.company} variant="heading-strong-l">
+                  <div key={`${experience.company}-${experience.role}-${index}`}>
+                    <div className="flex flex-wrap items-baseline justify-between gap-2">
+                      <h3
+                        id={experience.company}
+                        className="font-heading text-lg sm:text-xl font-bold text-fg"
+                      >
                         {experience.company}
-                      </Text>
-                      <Text variant="heading-default-xs" onBackground="neutral-weak">
-                        {experience.timeframe}
-                      </Text>
-                    </Row>
-                    <Text variant="body-default-s" onBackground="brand-weak" marginBottom="m">
-                      {experience.role}
-                    </Text>
-                    <Column as="ul" gap="16">
-                      {experience.achievements.map(
-                        (achievement: React.ReactNode, index: number) => (
-                          <Text
-                            as="li"
-                            variant="body-default-m"
-                            key={`${experience.company}-${index}`}
-                          >
-                            {achievement}
-                          </Text>
-                        ),
-                      )}
-                    </Column>
+                      </h3>
+                      <span className="text-sm text-fg-muted">{experience.timeframe}</span>
+                    </div>
+                    <div className="mt-0.5 text-sm text-brand">{experience.role}</div>
+                    <ul className="mt-4 list-disc space-y-3 pl-5 text-sm sm:text-base leading-relaxed text-fg/85 marker:text-fg-muted">
+                      {experience.achievements.map((achievement, idx) => (
+                        <li key={`${experience.company}-${idx}`}>{achievement}</li>
+                      ))}
+                    </ul>
                     {experience.images && experience.images.length > 0 && (
-                      <Row fillWidth paddingTop="m" paddingLeft="40" gap="12" wrap>
-                        {experience.images.map((image, index) => (
-                          <Row
-                            key={index}
-                            border="neutral-medium"
-                            radius="m"
-                            minWidth={image.width}
-                            height={image.height}
-                          >
-                            <Media
-                              enlarge
-                              radius="m"
-                              sizes={image.width.toString()}
-                              alt={image.alt}
-                              src={image.src}
-                            />
-                          </Row>
+                      <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        {experience.images.map((image, idx) => (
+                          <Media
+                            key={idx}
+                            enlarge
+                            aspectRatio="16 / 9"
+                            alt={image.alt}
+                            src={image.src}
+                          />
                         ))}
-                      </Row>
+                      </div>
                     )}
-                  </Column>
+                  </div>
                 ))}
-              </Column>
-            </>
-          )}
-
-          {about.studies.display && (
-            <>
-              <Heading as="h2" id={about.studies.title} variant="display-strong-s" marginBottom="m">
-                {about.studies.title}
-              </Heading>
-              <Column fillWidth gap="l" marginBottom="40">
-                {about.studies.institutions.map((institution, index) => (
-                  <Column key={`${institution.name}-${index}`} fillWidth gap="4">
-                    <Text id={institution.name} variant="heading-strong-l">
-                      {institution.name}
-                    </Text>
-                    <Text variant="heading-default-xs" onBackground="neutral-weak">
-                      {institution.description}
-                    </Text>
-                  </Column>
-                ))}
-              </Column>
-            </>
+              </div>
+            </section>
           )}
 
           {about.technical.display && (
-            <>
-              <Heading
-                as="h2"
+            <section className="flex flex-col gap-6">
+              <h2
                 id={about.technical.title}
-                variant="display-strong-s"
-                marginBottom="40"
+                className="font-heading text-3xl sm:text-4xl font-bold tracking-tight text-fg"
               >
                 {about.technical.title}
-              </Heading>
-              <Column fillWidth gap="l">
+              </h2>
+              <div className="flex flex-col gap-8">
                 {about.technical.skills.map((skill, index) => (
-                  <Column key={`${skill}-${index}`} fillWidth gap="4">
-                    <Text id={skill.title} variant="heading-strong-l">
+                  <div key={`${skill.title}-${index}`}>
+                    <h3
+                      id={skill.title}
+                      className="font-heading text-lg sm:text-xl font-bold text-fg"
+                    >
                       {skill.title}
-                    </Text>
-                    <Text variant="body-default-m" onBackground="neutral-weak">
-                      {skill.description}
-                    </Text>
+                    </h3>
+                    {skill.description && (
+                      <div className="mt-1.5 text-sm sm:text-base leading-relaxed text-fg-muted">
+                        {skill.description}
+                      </div>
+                    )}
                     {skill.tags && skill.tags.length > 0 && (
-                      <Row wrap gap="8" paddingTop="8">
+                      <div className="mt-3 flex flex-wrap gap-2">
                         {skill.tags.map((tag, tagIndex) => (
-                          <Tag key={`${skill.title}-${tagIndex}`} size="l" prefixIcon={tag.icon}>
+                          <Tag
+                            key={`${skill.title}-${tagIndex}`}
+                            size="m"
+                            prefixIcon={tag.icon}
+                            variant="neutral"
+                          >
                             {tag.name}
                           </Tag>
                         ))}
-                      </Row>
+                      </div>
                     )}
                     {skill.images && skill.images.length > 0 && (
-                      <Row fillWidth paddingTop="m" gap="12" wrap>
-                        {skill.images.map((image, index) => (
-                          <Row
-                            key={index}
-                            border="neutral-medium"
-                            radius="m"
-                            minWidth={image.width}
-                            height={image.height}
-                          >
-                            <Media
-                              enlarge
-                              radius="m"
-                              sizes={image.width.toString()}
-                              alt={image.alt}
-                              src={image.src}
-                            />
-                          </Row>
+                      <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        {skill.images.map((image, idx) => (
+                          <Media
+                            key={idx}
+                            enlarge
+                            aspectRatio="16 / 9"
+                            alt={image.alt}
+                            src={image.src}
+                          />
                         ))}
-                      </Row>
+                      </div>
                     )}
-                  </Column>
+                  </div>
                 ))}
-              </Column>
-            </>
+              </div>
+            </section>
           )}
-        </Column>
-      </Row>
-    </Column>
+
+          {about.awards?.display && (
+            <section className="flex flex-col gap-6">
+              <h2
+                id={about.awards.title}
+                className="font-heading text-3xl sm:text-4xl font-bold tracking-tight text-fg"
+              >
+                {about.awards.title}
+              </h2>
+              <div className="flex flex-col gap-7">
+                {about.awards.items.map((award, index) => (
+                  <div key={`${award.title}-${index}`}>
+                    <div className="flex flex-wrap items-baseline justify-between gap-2">
+                      <h3
+                        id={award.title}
+                        className="font-heading text-lg sm:text-xl font-bold text-fg"
+                      >
+                        {award.title}
+                      </h3>
+                      {award.date && (
+                        <span className="text-sm text-fg-muted">{award.date}</span>
+                      )}
+                    </div>
+                    {award.issuer && (
+                      <div className="mt-0.5 text-sm text-brand">{award.issuer}</div>
+                    )}
+                    {award.description && (
+                      <div className="mt-1.5 text-sm sm:text-base leading-relaxed text-fg-muted">
+                        {award.description}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+        </div>
+      </div>
+    </div>
   );
 }

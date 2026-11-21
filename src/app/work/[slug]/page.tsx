@@ -5,21 +5,15 @@ import {
   Meta,
   Schema,
   AvatarGroup,
-  Button,
-  Column,
-  Flex,
-  Heading,
   Media,
-  Text,
   SmartLink,
-  Row,
-  Avatar,
-  Line,
-} from "@once-ui-system/core";
+  ScrollToHash,
+  CustomMDX,
+} from "@/components";
 import { baseURL, about, person, work } from "@/resources";
 import { formatDate } from "@/utils/formatDate";
-import { ScrollToHash, CustomMDX } from "@/components";
 import { Metadata } from "next";
+import React from "react";
 import { Projects } from "@/components/work/Projects";
 
 export async function generateStaticParams(): Promise<{ slug: string }[]> {
@@ -40,7 +34,7 @@ export async function generateMetadata({
     : routeParams.slug || "";
 
   const posts = getPosts(["src", "app", "work", "projects"]);
-  let post = posts.find((post) => post.slug === slugPath);
+  const post = posts.find((p) => p.slug === slugPath);
 
   if (!post) return {};
 
@@ -63,20 +57,20 @@ export default async function Project({
     ? routeParams.slug.join("/")
     : routeParams.slug || "";
 
-  let post = getPosts(["src", "app", "work", "projects"]).find((post) => post.slug === slugPath);
+  const post = getPosts(["src", "app", "work", "projects"]).find((p) => p.slug === slugPath);
 
   if (!post) {
     notFound();
   }
 
   const avatars =
-    post.metadata.team?.map((person) => ({
-      src: person.avatar,
-      "aria-label": person.name,
+    post.metadata.team?.map((member) => ({
+      src: member.avatar,
+      "aria-label": member.name,
     })) || [];
 
   return (
-    <Column as="section" maxWidth="m" horizontal="center" gap="l">
+    <section className="flex w-full flex-col items-center gap-8 py-6">
       <Schema
         as="blogPosting"
         baseURL={baseURL}
@@ -94,46 +88,89 @@ export default async function Project({
           image: `${baseURL}${person.avatar}`,
         }}
       />
-      <Column maxWidth="s" gap="16" horizontal="center" align="center">
-        <SmartLink href="/work">
-          <Text variant="label-strong-m">Projects</Text>
+
+      <div className="flex w-full justify-start">
+        <SmartLink
+          href="/work"
+          prefixIcon="chevronLeft"
+          className="text-fg hover:text-fg/80"
+        >
+          Projects
         </SmartLink>
-        <Text variant="body-default-xs" onBackground="neutral-weak" marginBottom="12">
-          {post.metadata.publishedAt && formatDate(post.metadata.publishedAt)}
-        </Text>
-        <Heading variant="display-strong-m">{post.metadata.title}</Heading>
-      </Column>
-      <Row marginBottom="32" horizontal="center">
-        <Row gap="16" vertical="center">
-          {post.metadata.team && <AvatarGroup reverse avatars={avatars} size="s" />}
-          <Text variant="label-default-m" onBackground="brand-weak">
-            {post.metadata.team?.map((member, idx) => (
+      </div>
+
+      <header className="flex max-w-2xl flex-col items-center text-center gap-3">
+        {(post.metadata.publishedAt || post.metadata.tag) && (
+          <div className="flex flex-wrap items-center justify-center gap-2.5">
+            {post.metadata.publishedAt && (
+              <time className="font-mono text-xs font-medium text-fg/80">
+                {formatDate(post.metadata.publishedAt)}
+              </time>
+            )}
+            {post.metadata.publishedAt && post.metadata.tag && (
+              <span className="text-border-strong">·</span>
+            )}
+            {post.metadata.tag && (
+              <span className="rounded-full border border-border bg-neutral-alpha-weak px-3 py-0.5 font-mono text-[11px] font-medium uppercase tracking-wider text-fg-subtle">
+                {post.metadata.tag}
+              </span>
+            )}
+          </div>
+        )}
+        <h1 className="font-heading text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-fg text-balance">
+          {post.metadata.title}
+        </h1>
+      </header>
+
+      {post.metadata.team && post.metadata.team.length > 0 && (
+        <div className="flex items-center justify-center gap-4">
+          <AvatarGroup reverse avatars={avatars} size="s" />
+          <div className="text-sm font-medium text-fg">
+            {post.metadata.team.map((member, idx) => (
               <span key={idx}>
-                {idx > 0 && (
-                  <Text as="span" onBackground="neutral-weak">
-                    ,{" "}
-                  </Text>
-                )}
-                <SmartLink href={member.linkedIn}>{member.name}</SmartLink>
+                {idx > 0 && <span className="text-fg/60">, </span>}
+                <SmartLink
+                  href={member.linkedIn}
+                  className="text-fg hover:text-fg/80"
+                >
+                  {member.name}
+                </SmartLink>
               </span>
             ))}
-          </Text>
-        </Row>
-      </Row>
-      {post.metadata.images.length > 0 && (
-        <Media priority aspectRatio="16 / 9" radius="m" alt="image" src={post.metadata.images[0]} />
+          </div>
+        </div>
       )}
-      <Column style={{ margin: "auto" }} as="article" maxWidth="xs">
+
+      {post.metadata.images.length > 0 && (
+        <div className="w-full max-w-6xl">
+          <Media
+            priority
+            enlarge
+            aspectRatio="16 / 9"
+            alt={post.metadata.title}
+            src={post.metadata.images[0]}
+            className="w-full"
+          />
+        </div>
+      )}
+
+      <article className="w-full max-w-2xl">
         <CustomMDX source={post.content} />
-      </Column>
-      <Column fillWidth gap="40" horizontal="center" marginTop="40">
-        <Line maxWidth="40" />
-        <Heading as="h2" variant="heading-strong-xl" marginBottom="24">
-          Related projects
-        </Heading>
-        <Projects exclude={[post.slug]} range={[2]} />
-      </Column>
+      </article>
+
+      <div className="mt-8 flex w-full max-w-2xl flex-col gap-4 border-t border-border pt-8">
+        <div className="flex items-center justify-between gap-4">
+          <h2 className="font-heading text-base font-semibold tracking-tight text-fg">
+            More Projects
+          </h2>
+          <SmartLink href="/work" suffixIcon="arrowRight" className="text-xs">
+            All projects
+          </SmartLink>
+        </div>
+        <Projects exclude={[post.slug]} range={[1, 2]} compact />
+      </div>
+
       <ScrollToHash />
-    </Column>
+    </section>
   );
 }

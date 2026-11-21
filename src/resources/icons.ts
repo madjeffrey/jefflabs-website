@@ -10,8 +10,30 @@ import {
   HiOutlineEye,
   HiOutlineEyeSlash,
   HiOutlineDocument,
+  HiOutlineDocumentText,
   HiOutlineGlobeAsiaAustralia,
   HiOutlineRocketLaunch,
+  HiOutlineSun,
+  HiOutlineMoon,
+  HiOutlineChevronRight,
+  HiOutlineChevronLeft,
+  HiOutlineChevronDown,
+  HiOutlineCheck,
+  HiOutlineXMark,
+  HiOutlineSparkles,
+  HiOutlineBolt,
+  HiOutlineChartBar,
+  HiOutlineVideoCamera,
+  HiOutlineTrophy,
+  HiOutlineLockClosed,
+  HiOutlineClipboard,
+  HiOutlineCpuChip,
+  HiOutlineBeaker,
+  HiOutlineCommandLine,
+  HiOutlineCube,
+  HiOutlineCodeBracket,
+  HiOutlineAcademicCap,
+  HiOutlineInformationCircle,
 } from "react-icons/hi2";
 
 import {
@@ -20,9 +42,30 @@ import {
   PiGridFourDuotone,
   PiBookBookmarkDuotone,
   PiImageDuotone,
+  PiRobotDuotone,
+  PiGameControllerDuotone,
+  PiBrainDuotone,
+  PiGraphDuotone,
+  PiStackDuotone,
 } from "react-icons/pi";
 
-import { SiJavascript, SiNextdotjs, SiFigma, SiSupabase } from "react-icons/si";
+import {
+  SiJavascript,
+  SiTypescript,
+  SiNextdotjs,
+  SiTailwindcss,
+  SiPython,
+  SiPytorch,
+  SiOpencv,
+  SiFigma,
+  SiSupabase,
+  SiCplusplus,
+  SiRos,
+  SiNvidia,
+  SiDocker,
+  SiLinux,
+  SiRust,
+} from "react-icons/si";
 
 import {
   FaDiscord,
@@ -42,6 +85,33 @@ import {
 export const iconLibrary = {
   arrowUpRight: HiArrowUpRight,
   arrowRight: HiArrowRight,
+  chevronRight: HiOutlineChevronRight,
+  chevronLeft: HiOutlineChevronLeft,
+  chevronDown: HiOutlineChevronDown,
+  check: HiOutlineCheck,
+  close: HiOutlineXMark,
+  copy: HiOutlineClipboard,
+  lock: HiOutlineLockClosed,
+  light: HiOutlineSun,
+  dark: HiOutlineMoon,
+  sparkles: HiOutlineSparkles,
+  bolt: HiOutlineBolt,
+  chart: HiOutlineChartBar,
+  video: HiOutlineVideoCamera,
+  trophy: HiOutlineTrophy,
+  cpu: HiOutlineCpuChip,
+  beaker: HiOutlineBeaker,
+  terminal: HiOutlineCommandLine,
+  cube: HiOutlineCube,
+  code: HiOutlineCodeBracket,
+  academic: HiOutlineAcademicCap,
+  info: HiOutlineInformationCircle,
+  article: HiOutlineDocumentText,
+  robot: PiRobotDuotone,
+  gamepad: PiGameControllerDuotone,
+  brain: PiBrainDuotone,
+  graph: PiGraphDuotone,
+  layers: PiStackDuotone,
   email: HiEnvelope,
   globe: HiOutlineGlobeAsiaAustralia,
   person: PiUserCircleDuotone,
@@ -63,9 +133,20 @@ export const iconLibrary = {
   document: HiOutlineDocument,
   rocket: HiOutlineRocketLaunch,
   javascript: SiJavascript,
+  typescript: SiTypescript,
   nextjs: SiNextdotjs,
+  tailwind: SiTailwindcss,
+  python: SiPython,
+  pytorch: SiPytorch,
+  opencv: SiOpencv,
   supabase: SiSupabase,
   figma: SiFigma,
+  cplusplus: SiCplusplus,
+  ros: SiRos,
+  nvidia: SiNvidia,
+  docker: SiDocker,
+  linux: SiLinux,
+  rust: SiRust,
   facebook: FaFacebook,
   pinterest: FaPinterest,
   whatsapp: FaWhatsapp,
@@ -76,9 +157,3 @@ export const iconLibrary = {
 
 export type IconLibrary = typeof iconLibrary;
 export type IconName = keyof IconLibrary;
-
-// Registers the names above with Once UI, so `<Icon name>` and every `icon`
-// prop accept them and a typo is a type error.
-declare module "@once-ui-system/core" {
-  interface IconLibraryOverrides extends Record<IconName, true> {}
-}

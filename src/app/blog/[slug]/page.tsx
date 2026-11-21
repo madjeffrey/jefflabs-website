@@ -1,20 +1,15 @@
 import { notFound } from "next/navigation";
 import "katex/dist/katex.min.css";
-import { CustomMDX, ScrollToHash } from "@/components";
 import {
+  CustomMDX,
+  ScrollToHash,
   Meta,
   Schema,
-  Column,
-  Heading,
   HeadingNav,
-  Icon,
-  Row,
-  Text,
   SmartLink,
   Avatar,
   Media,
-  Line,
-} from "@once-ui-system/core";
+} from "@/components";
 import { baseURL, about, blog, person } from "@/resources";
 import { formatDate } from "@/utils/formatDate";
 import { getPosts } from "@/utils/utils";
@@ -41,7 +36,7 @@ export async function generateMetadata({
     : routeParams.slug || "";
 
   const posts = getPosts(["src", "app", "blog", "posts"]);
-  let post = posts.find((post) => post.slug === slugPath);
+  const post = posts.find((p) => p.slug === slugPath);
 
   if (!post) return {};
 
@@ -54,113 +49,98 @@ export async function generateMetadata({
   });
 }
 
-export default async function Blog({ params }: { params: Promise<{ slug: string | string[] }> }) {
+export default async function BlogPost({
+  params,
+}: {
+  params: Promise<{ slug: string | string[] }>;
+}) {
   const routeParams = await params;
   const slugPath = Array.isArray(routeParams.slug)
     ? routeParams.slug.join("/")
     : routeParams.slug || "";
 
-  let post = getPosts(["src", "app", "blog", "posts"]).find((post) => post.slug === slugPath);
+  const post = getPosts(["src", "app", "blog", "posts"]).find((p) => p.slug === slugPath);
 
   if (!post) {
     notFound();
   }
 
-  const avatars =
-    post.metadata.team?.map((person) => ({
-      src: person.avatar,
-    })) || [];
-
   return (
-    <Row fillWidth>
-      <Row maxWidth={12} m={{ hide: true }} />
-      <Row fillWidth horizontal="center">
-        <Column as="section" maxWidth="m" horizontal="center" gap="l" paddingTop="24">
-          <Schema
-            as="blogPosting"
-            baseURL={baseURL}
-            path={`${blog.path}/${post.slug}`}
-            title={post.metadata.title}
-            description={post.metadata.summary}
-            datePublished={post.metadata.publishedAt}
-            dateModified={post.metadata.publishedAt}
-            image={
-              post.metadata.image ||
-              `/api/og/generate?title=${encodeURIComponent(post.metadata.title)}`
-            }
-            author={{
-              name: person.name,
-              url: `${baseURL}${about.path}`,
-              image: `${baseURL}${person.avatar}`,
-            }}
-          />
-          <Column maxWidth="s" gap="16" horizontal="center" align="center">
-            <SmartLink href="/blog">
-              <Text variant="label-strong-m">Blog</Text>
-            </SmartLink>
-            <Text variant="body-default-xs" onBackground="neutral-weak" marginBottom="12">
-              {post.metadata.publishedAt && formatDate(post.metadata.publishedAt)}
-            </Text>
-            <Heading variant="display-strong-m">{post.metadata.title}</Heading>
-            {post.metadata.subtitle && (
-              <Text
-                variant="body-default-l"
-                onBackground="neutral-weak"
-                align="center"
-                style={{ fontStyle: "italic" }}
-              >
-                {post.metadata.subtitle}
-              </Text>
-            )}
-          </Column>
-          <Row marginBottom="32" horizontal="center">
-            <Row gap="16" vertical="center">
-              <Avatar size="s" src={person.avatar} aria-label={person.name} />
-              <Text variant="label-default-m" onBackground="brand-weak">
-                {person.name}
-              </Text>
-            </Row>
-          </Row>
-          {post.metadata.image && (
-            <Media
-              src={post.metadata.image}
-              alt={post.metadata.title}
-              aspectRatio="16/9"
-              priority
-              sizes="(min-width: 768px) 100vw, 768px"
-              border="neutral-alpha-weak"
-              radius="l"
-              marginTop="12"
-              marginBottom="8"
-            />
+    <div className="flex w-full justify-center gap-10 py-6">
+      <section className="flex w-full max-w-2xl flex-col items-center gap-6">
+        <Schema
+          as="blogPosting"
+          baseURL={baseURL}
+          path={`${blog.path}/${post.slug}`}
+          title={post.metadata.title}
+          description={post.metadata.summary}
+          datePublished={post.metadata.publishedAt}
+          dateModified={post.metadata.publishedAt}
+          image={
+            post.metadata.image ||
+            `/api/og/generate?title=${encodeURIComponent(post.metadata.title)}`
+          }
+          author={{
+            name: person.name,
+            url: `${baseURL}${about.path}`,
+            image: `${baseURL}${person.avatar}`,
+          }}
+        />
+
+        <header className="flex flex-col items-center text-center gap-3">
+          <SmartLink href="/blog" prefixIcon="chevronLeft">
+            Blog
+          </SmartLink>
+          <time className="text-xs font-medium text-fg-muted">
+            {post.metadata.publishedAt && formatDate(post.metadata.publishedAt)}
+          </time>
+          <h1 className="font-heading text-3xl sm:text-4xl font-extrabold tracking-tight text-fg text-balance">
+            {post.metadata.title}
+          </h1>
+          {post.metadata.subtitle && (
+            <p className="text-base sm:text-lg italic text-fg-muted">
+              {post.metadata.subtitle}
+            </p>
           )}
-          <Column as="article" maxWidth="s">
-            <CustomMDX source={post.content} />
-          </Column>
+        </header>
 
-          <ShareSection title={post.metadata.title} url={`${baseURL}${blog.path}/${post.slug}`} />
+        <div className="flex items-center gap-3 py-2">
+          <Avatar size="s" src={person.avatar} aria-label={person.name} />
+          <span className="text-sm font-semibold text-brand">{person.name}</span>
+        </div>
 
-          <Column fillWidth gap="40" horizontal="center" marginTop="40">
-            <Line maxWidth="40" />
-            <Text as="h2" id="recent-posts" variant="heading-strong-xl" marginBottom="24">
-              Recent posts
-            </Text>
-            <Posts exclude={[post.slug]} range={[1, 2]} columns="2" thumbnail direction="column" />
-          </Column>
-          <ScrollToHash />
-        </Column>
-      </Row>
-      <Column
-        maxWidth={12}
-        paddingLeft="40"
-        fitHeight
-        position="sticky"
-        top="80"
-        gap="16"
-        m={{ hide: true }}
-      >
-        <HeadingNav fitHeight />
-      </Column>
-    </Row>
+        {post.metadata.image && (
+          <Media
+            src={post.metadata.image}
+            alt={post.metadata.title}
+            aspectRatio="16 / 9"
+            priority
+            enlarge
+            className="w-full my-2"
+          />
+        )}
+
+        <article className="w-full">
+          <CustomMDX source={post.content} />
+        </article>
+
+        <ShareSection title={post.metadata.title} url={`${baseURL}${blog.path}/${post.slug}`} />
+
+        <div className="mt-8 flex w-full flex-col items-center gap-6 border-t border-border pt-8">
+          <h2 id="recent-posts" className="font-heading text-2xl font-bold text-fg">
+            Recent articles
+          </h2>
+          <Posts exclude={[post.slug]} range={[1, 2]} columns="2" thumbnail direction="column" />
+        </div>
+
+        <ScrollToHash />
+      </section>
+
+      <aside className="hidden lg:block w-56 shrink-0">
+        <div className="sticky top-24">
+          <HeadingNav />
+        </div>
+      </aside>
+    </div>
   );
 }

@@ -1,7 +1,7 @@
-import { Column, Heading, Meta, Schema } from "@once-ui-system/core";
-import { Newsletter } from "@/components";
+import React from "react";
+import { Meta, Schema, Newsletter } from "@/components";
 import { Posts } from "@/components/blog/Posts";
-import { baseURL, blog, person, newsletter } from "@/resources";
+import { baseURL, blog, person } from "@/resources";
 
 export async function generateMetadata() {
   return Meta.generate({
@@ -15,7 +15,7 @@ export async function generateMetadata() {
 
 export default function Blog() {
   return (
-    <Column maxWidth="m" paddingTop="24">
+    <div className="flex w-full max-w-4xl flex-col gap-10 py-6">
       <Schema
         as="blogPosting"
         baseURL={baseURL}
@@ -29,18 +29,21 @@ export default function Blog() {
           image: `${baseURL}${person.avatar}`,
         }}
       />
-      <Heading marginBottom="l" variant="heading-strong-xl" marginLeft="24">
-        {blog.title}
-      </Heading>
-      <Column fillWidth flex={1} gap="40" s={{ gap: "24" }}>
-        <Posts range={[1, 1]} thumbnail />
-        <Posts range={[2, 3]} columns="2" thumbnail direction="column" />
-        <Newsletter marginBottom="l" />
-        <Heading as="h2" variant="heading-strong-xl" marginLeft="l">
-          Earlier posts
-        </Heading>
-        <Posts range={[4]} columns="2" />
-      </Column>
-    </Column>
+
+      <header className="flex flex-col items-start text-left gap-3 border-b border-border pb-6">
+        <span className="font-mono text-xs font-semibold uppercase tracking-wider text-brand">
+          Blog
+        </span>
+        <h1 className="font-heading text-3xl sm:text-4xl font-extrabold tracking-tight text-fg">
+          {blog.title}
+        </h1>
+        <p className="max-w-2xl text-sm sm:text-base text-fg-muted leading-relaxed">
+          {blog.description}
+        </p>
+      </header>
+
+      <Posts enableFilter />
+      <Newsletter />
+    </div>
   );
 }

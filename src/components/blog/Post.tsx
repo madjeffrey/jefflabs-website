@@ -1,73 +1,114 @@
 "use client";
 
-import { Card, Column, Media, Row, Avatar, Text } from "@once-ui-system/core";
+import React from "react";
+import Link from "next/link";
+import { Media } from "@/components/ui/Media";
+import { Avatar } from "@/components/ui/Avatar";
 import { formatDate } from "@/utils/formatDate";
 import { person } from "@/resources";
 
-interface PostProps {
+export interface PostProps {
   post: {
     slug: string;
-    metadata: { title: string; publishedAt: string; image?: string; tag?: string };
+    metadata: {
+      title: string;
+      summary?: string;
+      publishedAt: string;
+      image?: string;
+      tag?: string;
+    };
   };
   thumbnail: boolean;
   direction?: "row" | "column";
+  compact?: boolean;
 }
 
-export default function Post({ post, thumbnail, direction }: PostProps) {
+export default function Post({
+  post,
+  thumbnail,
+  direction = "row",
+  compact = false,
+}: PostProps) {
+  if (compact) {
+    return (
+      <Link
+        href={`/blog/${post.slug}`}
+        className="group flex w-full flex-col gap-3 rounded-2xl p-4 transition-colors duration-200 hover:bg-neutral-alpha-weak"
+      >
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+          <div className="flex items-center gap-2">
+            <Avatar src={person.avatar} size="xs" aria-label={person.name} />
+            <span className="font-normal text-fg">{person.name}</span>
+          </div>
+          <time dateTime={post.metadata.publishedAt} className="text-fg-subtle">
+            {formatDate(post.metadata.publishedAt, false)}
+          </time>
+        </div>
+
+        <h3 className="font-heading text-xl font-bold leading-snug tracking-tight text-fg text-balance">
+          {post.metadata.title}
+        </h3>
+
+        {post.metadata.tag && (
+          <span className="pt-1 text-xs font-medium text-fg-muted">
+            {post.metadata.tag}
+          </span>
+        )}
+      </Link>
+    );
+  }
+
+  const isColumn = direction === "column";
+
   return (
-    <Card
-      fillWidth
-      key={post.slug}
+    <Link
       href={`/blog/${post.slug}`}
-      transition="micro-medium"
-      direction={direction}
-      border="transparent"
-      background="transparent"
-      padding="4"
-      radius="l-4"
-      gap={direction === "column" ? undefined : "24"}
-      s={{ direction: "column" }}
+      className={`group flex w-full overflow-hidden rounded-2xl border border-transparent bg-transparent p-4 transition-colors duration-200 hover:bg-neutral-alpha-weak ${
+        isColumn ? "flex-col gap-3" : "flex-col md:flex-row md:items-center gap-5"
+      }`}
     >
       {post.metadata.image && thumbnail && (
-        <Media
-          priority
-          sizes="(max-width: 768px) 100vw, 640px"
-          border="neutral-alpha-weak"
-          cursor="interactive"
-          radius="l"
-          src={post.metadata.image}
-          alt={"Thumbnail of " + post.metadata.title}
-          aspectRatio="16 / 9"
-        />
+        <div className={isColumn ? "w-full" : "w-full md:w-5/12 shrink-0"}>
+          <Media
+            priority
+            src={post.metadata.image}
+            alt={`Thumbnail of ${post.metadata.title}`}
+            aspectRatio="16 / 9"
+            className="w-full rounded-xl"
+          />
+        </div>
       )}
-      <Row fillWidth>
-        <Column
-          maxWidth={28}
-          paddingY="24"
-          paddingX="l"
-          gap="20"
-          vertical="center"
-          s={{ paddingY: "16", paddingX: "16", gap: "12" }}
-        >
-          <Row gap="24" vertical="center">
-            <Row vertical="center" gap="16">
-              <Avatar src={person.avatar} size="s" aria-label={person.name} />
-              <Text variant="label-default-s">{person.name}</Text>
-            </Row>
-            <Text variant="body-default-xs" onBackground="neutral-weak">
-              {formatDate(post.metadata.publishedAt, false)}
-            </Text>
-          </Row>
-          <Text variant="heading-strong-l" wrap="balance">
-            {post.metadata.title}
-          </Text>
+
+      <div className="flex flex-1 flex-col justify-center gap-2.5 px-1 py-1">
+        <div className="flex flex-wrap items-center gap-2.5 text-xs text-fg-muted">
+          <div className="flex items-center gap-2">
+            <Avatar src={person.avatar} size="xs" aria-label={person.name} />
+            <span className="font-medium text-fg">{person.name}</span>
+          </div>
+          <span className="text-border-strong">·</span>
+          <time dateTime={post.metadata.publishedAt} className="font-mono text-[11px]">
+            {formatDate(post.metadata.publishedAt, false)}
+          </time>
           {post.metadata.tag && (
-            <Text variant="label-strong-s" onBackground="neutral-weak">
-              {post.metadata.tag}
-            </Text>
+            <>
+              <span className="text-border-strong">·</span>
+              <span className="rounded-full border border-border bg-neutral-alpha-weak px-2.5 py-0.5 font-mono text-[11px] font-medium uppercase tracking-wider text-fg-subtle">
+                {post.metadata.tag}
+              </span>
+            </>
           )}
-        </Column>
-      </Row>
-    </Card>
+        </div>
+
+        <h3 className="font-heading text-lg sm:text-xl font-bold tracking-tight text-fg transition-colors">
+          {post.metadata.title}
+        </h3>
+
+        {post.metadata.summary && (
+          <p className="line-clamp-2 text-sm text-fg-muted leading-relaxed">
+            {post.metadata.summary}
+          </p>
+        )}
+      </div>
+    </Link>
   );
 }
